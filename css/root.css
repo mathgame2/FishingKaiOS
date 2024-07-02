@@ -1,0 +1,22 @@
+/* Taken from Sample Vanilla KaiOS Project https://developer.kaiostech.com/docs/development/build-your-first-package-app/sample-code*/
+
+* {
+    box-sizing: border-box;
+  }
+  
+  html,
+  body,
+  #root {
+    font-family: "Open Sans", sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: #E1E2E1 !important;
+  }
+
+  .centered {
+    display: block;
+    position: relative;
+    margin: auto;
+  }

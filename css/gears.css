@@ -1,0 +1,23 @@
+.gearItem {
+    background-color: aquamarine;
+    overflow: hidden;
+    object-fit: fill;
+}
+
+.gearItem:focus {
+    background-color: rebeccapurple;
+}
+
+.gearItem[selected='true'] {
+    border: 1px solid black;
+}
+
+.doneButton {
+    background-color: aquamarine;
+    overflow: hidden;
+    object-fit: fill;
+}
+
+.doneButton:focus {
+    background-color: rebeccapurple;
+}

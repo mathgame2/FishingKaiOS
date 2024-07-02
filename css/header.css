@@ -1,0 +1,19 @@
+/* Taken from Sample Vanilla KaiOS Project https://developer.kaiostech.com/docs/development/build-your-first-package-app/sample-code*/
+
+header {
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #9b27af;
+    text-align: center;
+    padding: 3px 10px;
+  }
+  
+  header span {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    text-transform: uppercase;
+  }
+  
