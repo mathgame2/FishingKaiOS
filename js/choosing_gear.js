@@ -1,32 +1,32 @@
 // Build with assumption of grid with width of 2 items
 
+window.addEventListener('keydown', function(e) {
+  switch(e.key) {
+    case 'Enter':
+      Enter(e);
+      break;
+    case 'ArrowUp': //scroll up
+      Up(e);
+      break;
+    case 'ArrowLeft':
+      Left(e);
+      break;
+    case 'ArrowDown': //scroll down
+      Down(e);
+      break
+    case 'ArrowRight':
+      Right(e)
+      break;
+  }})
+
 window.addEventListener('DOMContentLoaded', function() {
-    var mainlist = document.getElementById('gear_list')
+    var mainlist = document.getElementById('gearList')
     var totalGear = 0;
 
-    window.addEventListener('keydown', function(e) {
-      switch(e.key) {
-        case 'Enter':
-          Enter(e);
-          break;
-        case 'ArrowUp': //scroll up
-          Up(e);
-          break;
-        case 'ArrowLeft':
-          Left(e);
-          break;
-        case 'ArrowDown': //scroll down
-          Down(e);
-          break
-        case 'ArrowRight':
-          Right(e)
-          break;
-      }})
-
-
+    
 
     function add_new_gear(file_loc, name){
-        var gridContainer = document.getElementById('gear_list');
+        var gridContainer = document.getElementById('gearList');
         var itemWidth = 50;
 
         var entry = document.createElement("img");
@@ -44,7 +44,7 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     function addDoneButton(){
-      var gridContainer = document.getElementById('gear_list');
+      var gridContainer = document.getElementById('gearList');
       var itemWidth = 50;
 
       var entry = document.createElement("img");

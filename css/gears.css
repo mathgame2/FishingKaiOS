@@ -21,3 +21,7 @@
 .doneButton:focus {
     background-color: rebeccapurple;
 }
+
+#gearList{
+    overflow: hidden;
+}

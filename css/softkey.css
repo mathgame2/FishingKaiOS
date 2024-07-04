@@ -14,7 +14,7 @@
     font-weight: 700;
     box-sizing: border-box;
     line-height: 26px;
-    margin-top: auto;
+    /* margin-top: auto; */
     position: absolute;
     bottom: 0;
   }
