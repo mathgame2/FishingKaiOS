@@ -5,7 +5,7 @@
   }
   
   html,
-  body{
+  body {
     font-family: "Open Sans", sans-serif;
     margin: 0;
     display: flex;
@@ -20,13 +20,14 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    background-color: #E1E2E1 !important;
+    height: 90vh;
+    /* background-color: #E1E2E1 !important; */
     /* height: 90%; */
     /* object-fit: fill; */
   }
 
-  .inputArea{
-    height: 90%;
+  .inputArea {
+    /* height: 90vh; */
     object-fit: fill;
   }
   /* .centered {

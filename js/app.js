@@ -1,4 +1,31 @@
+// Global app state
+var STATE = {}
+
+STATE.keyFunctions = {
+  dUp: function () { Up(); },
+  dDown: function () { Down(); },
+  dLeft: function () { Left(); },
+  dRight: function () { Right(); },
+  softLeft: function () { goBack(); },
+  softRight: function () { executeOption(); },
+  enter: function () { execute(); },
+  menu: function () { },
+  back: function () { goBack(); },
+  quit: function () { },
+  other: function () { }
+}
+
+
 window.addEventListener("load", function() {
+  var viewRoot = document.getElementById("viewRoot");
+
+  console.log(viewRoot.querySelectorAll(".view"));
+  STATE.views = viewRoot.querySelectorAll(".view");
+  STATE.activeView = STATE.views[0];
+
+  STATE.activeViewID = 0;
+  STATE.activeViewName = STATE.activeView.getAttribute("id");
+
   });
   
   window.addEventListener('keydown', function(e) {
@@ -67,3 +94,21 @@ window.addEventListener("load", function() {
     selectElement(allElements[setIndex] || allElements[0]);
   };
   
+
+  function addDoneButton(containerID){
+    var gridContainer = document.getElementById(containerID);
+    var itemWidth = 50;
+
+    var entry = document.createElement("img");
+    entry.src = "../resources/done.png";
+    entry.alt = "done";
+    entry.className = 'doneButton';
+    entry.id = 'done';
+    entry.style.width = itemWidth + "%";
+    entry.setAttribute('nav-selectable', 'true');
+    entry.setAttribute('selected', 'false');
+
+    gridContainer.appendChild(entry);
+}
+
+console.log("DONE APPJS");
