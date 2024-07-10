@@ -8,7 +8,7 @@
     background-color: rebeccapurple;
 }
 
-.gearBox[selected='true'] {
+.gearBox[gear-selected='true'] {
     border: 1px solid black;
 }
 
