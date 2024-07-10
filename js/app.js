@@ -48,11 +48,13 @@ window.addEventListener("load", function() {
         Up(e);
         break;
       case 'ArrowLeft':
+        Left(e);
         break;
       case 'ArrowDown': //scroll down
         Down(e);
         break
       case 'ArrowRight':
+        Right(e);
         break;
     }})
   
@@ -67,15 +69,16 @@ window.addEventListener("load", function() {
             STATE.activeViewID = 1;
             STATE.activeViewName = STATE.activeView.getAttribute("id");
             STATE.activeView.classList.add('active');
-
-            document.activeElement.blur();
+            
             setNaviItems();
             setNavIndices();
 
             const firstElement = STATE.naviItems[0];
+            firstElement.scrollIntoView({ behavior: "smooth" });
             firstElement.setAttribute("nav-selected", "true");
-
             firstElement.focus();
+            firstElement.focus();
+            
             setColumnNumber();
         }
         break;
@@ -83,12 +86,7 @@ window.addEventListener("load", function() {
     }
   
     function setNaviItems(){
-      for(var i = 0; i < STATE.naviItems.length; i++){
-        STATE.naviItems[i].blur();
-      }
-
       STATE.naviItems = STATE.activeView.querySelectorAll("[nav-selectable]");
-
     }
   
   const getAllElements = () => STATE.activeView.querySelectorAll("[nav-selectable]");
@@ -102,8 +100,6 @@ window.addEventListener("load", function() {
     const prevElement = document.activeElement;
     
     const nextElement = getAllElements()[setIndex];
-    console.log(setIndex);
-    console.log(nextElement);
 
     prevElement.setAttribute("nav-selected", false);
     prevElement.blur();
@@ -111,10 +107,30 @@ window.addEventListener("load", function() {
     nextElement.setAttribute("nav-selected", true);
     nextElement.focus();
 
-    console.log(nextElement);
-
   }
   
+  const Right = event => {
+    if (document.activeElement.tagName.toLowerCase() !== 'input'){
+      const allElements = getAllElements();
+      const currentIndex = getTheIndexOfTheSelectedElement();
+      const goToFirstElement = currentIndex + 1 > allElements.length - 1;
+      const setIndex = goToFirstElement ? 0 : currentIndex + 1;
+      selectElement(setIndex);
+    }
+    
+  };
+
+  const Left = event => {
+    if (document.activeElement.tagName.toLowerCase() !== 'input'){
+    const allElements = getAllElements();
+    const currentIndex = getTheIndexOfTheSelectedElement();
+    const goToLastElement = currentIndex - 1 < 0;
+    const setIndex = goToLastElement ? allElements.length - 1 : currentIndex - 1;
+    selectElement(setIndex);
+    }
+    
+  };
+
   const Down = event => {
     const allElements = getAllElements();
     const currentIndex = getTheIndexOfTheSelectedElement();

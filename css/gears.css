@@ -1,13 +1,14 @@
-.gearItem {
+.gearBox {
+    display: flex;
+    flex-direction: column;
     background-color: aquamarine;
-    object-fit: fill;
 }
 
-.gearItem:focus {
+.gearBox:focus {
     background-color: rebeccapurple;
 }
 
-.gearItem[selected='true'] {
+.gearBox[selected='true'] {
     border: 1px solid black;
 }
 
@@ -21,10 +22,3 @@
     background-color: rebeccapurple;
 }
 
-#gearList{
-    height: 90%;
-    overflow-y: scroll;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
