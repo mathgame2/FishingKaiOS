@@ -16,14 +16,13 @@ body {
   }
   
   #viewRoot {
-    height: 90%;
+    height: 90vh;
   }
 
   .view {
-    padding: 3%;
     display: none;
   }
 
   .view.active {
-    display: block;
+    display: flex;
   }

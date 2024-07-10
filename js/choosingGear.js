@@ -29,7 +29,3 @@ function populateGear(){
     add_new_gear("../resources/fish/fish1.png", "fish1");
     add_new_gear("../resources/fish/fish2.png", "fish2");
 }
-// addDoneButton('gearList');
-// console.log("hellodarknessmyoldfriend");
-
-console.log("DONE CHOOSING GEAR");
