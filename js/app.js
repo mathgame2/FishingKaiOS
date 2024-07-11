@@ -135,18 +135,29 @@ const Up = event => {
 
 function addDoneButton(containerID) {
   var gridContainer = document.getElementById(containerID);
-  var itemWidth = 50;
 
+  var container = document.createElement("div");
+  var tag = document.createElement("b");
+  tag.textContent = "done";
   var entry = document.createElement("img");
-  entry.src = "../resources/done.png";
+
+  entry.src = "../resources/done.png";;
   entry.alt = "done";
   entry.className = 'doneButton';
-  entry.id = 'done';
-  entry.style.width = itemWidth + "%";
-  entry.setAttribute('nav-selectable', 'true');
-  entry.setAttribute('selected', 'false');
 
-  gridContainer.appendChild(entry);
+  // Needed to make the image tags focusable
+  container.tabIndex = -1;
+
+  container.className = "gearBox";
+  
+  container.setAttribute('nav-selectable', 'true');
+  container.setAttribute('selected', 'false');
+
+  container.appendChild(entry);
+  container.appendChild(tag);
+  container.id = "done";
+
+  gridContainer.appendChild(container);
 }
 
 function setColumnNumber() {
@@ -161,4 +172,30 @@ function setNavIndices() {
     allActiveElements[index].setAttribute("nav-index", index);
   }
 
+}
+
+function changeViewTo(viewName){
+  for (let index = 0; index < STATE.views.length; index++) {
+    if (STATE.views[index].id === viewName) {
+        STATE.activeView.classList.remove('active')
+        STATE.activeView = STATE.views[index];
+        STATE.activeViewID = index;
+
+        STATE.activeViewName = STATE.activeView.getAttribute("id");
+        STATE.activeView.classList.add('active')
+
+        setNaviItems();
+        setNavIndices();
+
+        const firstElement = STATE.naviItems[0];
+        firstElement.scrollIntoView({ behavior: "smooth" });
+        firstElement.setAttribute("nav-selected", "true");
+        firstElement.focus();
+        firstElement.focus();
+
+        setColumnNumber();
+
+    }
+
+}
 }

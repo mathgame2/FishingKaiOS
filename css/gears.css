@@ -2,6 +2,13 @@
     display: flex;
     flex-direction: column;
     background-color: aquamarine;
+    height: 100%;
+    width: 100%;
+}
+
+.gearBox b {
+    overflow: hidden;
+    word-break: break-all;
 }
 
 .gearBox:focus {
