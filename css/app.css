@@ -30,3 +30,9 @@ body {
     grid-template-columns: 1fr 1fr;
     grid-gap: 10px;
   }
+
+  .view.fishInput.active {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 10px;
+  }

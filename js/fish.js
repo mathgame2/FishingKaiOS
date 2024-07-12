@@ -26,16 +26,20 @@ function add_new_fish(file_loc, name) {
 
 function setFishEnterKeyHandlers() {
 
-
-    event => {
+    document.getElementById("fishView").enterKeyHandler = event => {
         const allElements = getAllElements();
         const currentIndex = getTheIndexOfTheSelectedElement();
         currentElement = allElements[currentIndex];
         if (currentElement.id === "done") {
+            // Clear all selected elements for next time
+            const selectedElements = allElements.querySelectorAll("[image-selected=true]")
+            for (let i = 0; i < selectedElements.length; i++) {
+                selectedElements[i].setAttribute("image-selected", false);
+            }
             // changeViewTo("gearView");
-        } else if (currentElement.getAttribute('fish-selected') === 'true') {
+        } else if (currentElement.getAttribute('image-selected') === 'true') {
 
-            currentElement.setAttribute('fish-selected', 'false');
+            currentElement.setAttribute('image-selected', 'false');
             for (let i = 0; i < STATE.chosenFish.length; i++) {
                 if (STATE.chosenFish[i].querySelector("b").textContent === currentElement.querySelector("b").textContent) {
                     STATE.chosenFish.splice(i, 1);
@@ -44,7 +48,7 @@ function setFishEnterKeyHandlers() {
             }
 
         } else {
-            currentElement.setAttribute('fish-selected', 'true');
+            currentElement.setAttribute('image-selected', 'true');
             STATE.chosenFish.push(currentElement);
         }
     };
