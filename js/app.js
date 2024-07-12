@@ -4,6 +4,8 @@ var STATE = {}
 window.addEventListener("load", function () {
   var viewRoot = document.getElementById("viewRoot");
 
+  // Will need to implement loading of registered gear.
+  STATE.registeredGear = new Array();
   STATE.views = viewRoot.querySelectorAll(".view");
   STATE.activeView = STATE.views[0];
 
@@ -12,22 +14,7 @@ window.addEventListener("load", function () {
     const fisher_id = this.document.getElementById("fid");
     const boat_id = this.document.getElementById("bid");
     if (fisher_id.value && boat_id.value) {
-      STATE.activeView.classList.remove('active');
-      STATE.activeView = STATE.views[1];
-      STATE.activeViewID = 1;
-      STATE.activeViewName = STATE.activeView.getAttribute("id");
-      STATE.activeView.classList.add('active');
-
-      setNaviItems();
-      setNavIndices();
-
-      const firstElement = STATE.naviItems[0];
-      firstElement.scrollIntoView({ behavior: "smooth" });
-      firstElement.setAttribute("nav-selected", "true");
-      firstElement.focus();
-      firstElement.focus();
-
-      setColumnNumber();
+      changeViewTo("gearView");
     }
   }
 
@@ -148,7 +135,7 @@ function addDoneButton(containerID) {
   // Needed to make the image tags focusable
   container.tabIndex = -1;
 
-  container.className = "gearBox";
+  container.className = "imageBox";
   
   container.setAttribute('nav-selectable', 'true');
   container.setAttribute('selected', 'false');

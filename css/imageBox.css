@@ -1,4 +1,4 @@
-.gearBox {
+.imageBox {
     display: flex;
     flex-direction: column;
     background-color: aquamarine;
@@ -6,26 +6,17 @@
     width: 100%;
 }
 
-.gearBox b {
+.imageBox b {
     overflow: hidden;
     word-break: break-all;
 }
 
-.gearBox:focus {
+.imageBox:focus {
     background-color: rebeccapurple;
 }
 
-.gearBox[gear-selected='true'] {
+.imageBox[image-selected='true'] {
     border: 1px solid black;
 }
 
-.doneButton {
-    background-color: aquamarine;
-    overflow: hidden;
-    object-fit: fill;
-}
-
-.doneButton:focus {
-    background-color: rebeccapurple;
-}
 
