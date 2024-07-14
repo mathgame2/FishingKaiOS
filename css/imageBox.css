@@ -6,9 +6,30 @@
     width: 100%;
 }
 
-.imageBox b {
+.imageBox b {  
     overflow: hidden;
     word-break: break-all;
+    position:relative; 
+    bottom: 0;
+}
+
+.imageBox p {
+    height: 100%;
+}
+
+#tallyText {
+    padding-top: 0;
+    overflow-wrap: break-word;
+    display: inline-block;
+    
+}
+
+#inputNumberBox{
+    grid-column: 1 / 2;
+}
+
+#numberText {
+    overflow: visible;
 }
 
 .imageBox:focus {
@@ -19,3 +40,6 @@
     border: 1px solid black;
 }
 
+#fishCaughtView {
+    overflow: visible;
+}

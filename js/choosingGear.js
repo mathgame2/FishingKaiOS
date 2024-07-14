@@ -42,31 +42,7 @@ function add_new_encircling_gear(file_loc, name) {
     add_new_choice("encirclingGearView", "imageBox", file_loc, name);
 }
 
-function add_new_choice(gridContainerID, containerClassName, file_loc, name) {
-    var gridContainer = document.getElementById(gridContainerID);
 
-    var container = document.createElement("div");
-    var tag = document.createElement("b");
-    tag.textContent = name;
-    var entry = document.createElement("img");
-
-    entry.src = file_loc;
-    entry.alt = name;
-
-    // Needed to make the image tags focusable
-    container.tabIndex = -1;
-
-    container.className = containerClassName;
-
-    container.setAttribute('nav-selectable', 'true');
-    container.setAttribute('image-selected', 'false');
-
-    container.appendChild(entry);
-    container.appendChild(tag);
-
-
-    gridContainer.appendChild(container);
-}
 
 function setGearEnterKeyHandlers() {
     var gridViewContainer = document.getElementById('gearView');

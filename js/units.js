@@ -18,6 +18,7 @@ function setUnitsEnterKeyHandlers() {
     unitView.enterKeyHandler = event => {
         const curElement = event.target;
         STATE.currentRecord.unit = curElement.querySelector("b").textContent;
+        STATE.currentUnit = curElement;
         changeViewTo("fishView");
     }
 }
