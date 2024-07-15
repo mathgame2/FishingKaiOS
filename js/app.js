@@ -37,21 +37,26 @@ window.addEventListener("load", function () {
 
 });
 
-window.addEventListener('keydown', function (e) {
+window.addEventListener('keyup', function (e) {
   switch (e.key) {
     case 'Enter':
+    case '5':
       STATE.activeView.enterKeyHandler(e);
       break;
-    case 'ArrowUp': //scroll up
+    case 'ArrowUp':
+    case '2':
       Up(e);
       break;
     case 'ArrowLeft':
+    case '4':
       Left(e);
       break;
-    case 'ArrowDown': //scroll down
+    case 'ArrowDown':
+    case '8':
       Down(e);
       break
     case 'ArrowRight':
+    case '6':
       Right(e);
       break;
   }
@@ -208,6 +213,7 @@ function changeViewTo(viewName) {
       firstElement.focus();
 
       setColumnNumber();
+      setSoftKeys();
 
     }
 
@@ -290,4 +296,31 @@ function set_tallies(count) {
       break;
   }
   tallies.appendChild(tally)
+}
+
+function setSoftKeys() {
+  const softKeyBar = document.getElementById("softkey");
+  const left = softKeyBar.querySelector("#left");
+  const right = softKeyBar.querySelector("#right");
+  const center = softKeyBar.querySelector("#center");
+  switch (STATE.activeViewName) {
+    case "registerView":
+    case "fishCaughtView":
+    case "mapView":
+      left.textContent = "";
+      right.textContent = "";
+      center.textContent = "Submit"
+      break;
+    case "gearView":
+    case "staticGearView":
+    case "encirclingGearView":
+    case "towedGearView":
+    case "gearRecordView":
+    case "unitView":
+    case "fishView":
+      left.textContent = "";
+      right.textContent = "";
+      center.textContent = "Select"
+      break;
+  }
 }

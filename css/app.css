@@ -7,29 +7,33 @@ body {
     flex-direction: column;
     overflow: hidden;
     background-color: #E1E2E1 !important;
-  }
-  
-  *,
-  *::before,
-  *::after {
-    box-sizing: inherit;
-  }
-  
-  #viewRoot {
-    height: 90vh;
-  }
+}
 
-  .view {
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+#viewRoot {
+    height: 90vh;
+}
+
+.view {
     display: none;
     width: 100%;
     overflow-y: scroll;
-  }
+}
 
-  .view.active {
+.view.active {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 10px;
-  }
+    grid-template-areas:
+        ". ."
+        "a a";
+}
+
 /* 
   .view.fishInput.active {
     display: grid;

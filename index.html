@@ -1,57 +1,60 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,height=device-height">
-    <link rel="stylesheet" type="text/css" href="/css/header.css" />
-    <link rel="stylesheet" type="text/css" href="/css/app.css" />
-    <link rel="stylesheet" type="text/css" href="/css/softkey.css" />
-    <link rel="stylesheet" type="text/css" href="/css/imageBox.css"/>
-    <title>Fishing</title>
 
-    <!-- Inline scripts are forbidden in Firefox OS apps (CSP restrictions),
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,height=device-height">
+  <link rel="stylesheet" type="text/css" href="/css/header.css" />
+  <link rel="stylesheet" type="text/css" href="/css/app.css" />
+  <link rel="stylesheet" type="text/css" href="/css/softkey.css" />
+  <link rel="stylesheet" type="text/css" href="/css/imageBox.css" />
+  <title>Fishing</title>
+
+  <!-- Inline scripts are forbidden in Firefox OS apps (CSP restrictions),
          so we use a script file. -->
-    <script type="text/javascript" src="js/app.js" defer></script>
-    <script type="text/javascript" src="js/choosingGear.js" defer></script>
-    <script type="text/javascript" src="js/units.js" defer></script>
-    <script type="text/javascript" src="js/fish.js" defer></script>
+  <script type="text/javascript" src="js/app.js" defer></script>
+  <script type="text/javascript" src="js/choosingGear.js" defer></script>
+  <script type="text/javascript" src="js/units.js" defer></script>
+  <script type="text/javascript" src="js/fish.js" defer></script>
 
-  </head>
+</head>
 
-  <body>
-    <div id="viewRoot">
-        <div class="view" id="registerView" nav-column-size="1">
-            <div class="centered">
-                <label for="fname">Fisher Identifier</label><br>
-                <input type="text" nav-selectable="true" id="fid" name="fid" value=""><br><br>
-                <label for="lname">Boat ID</label><br>
-                <input type="text" nav-selectable="true" id="bid" name="bid" value="">
-            </div>
-        </div>
-        <div class="view" id="gearView" nav-column-size="2">
-        </div>
-        <div class="view" id="staticGearView" nav-column-size="2">
-        </div>
-        <div class="view" id="encirclingGearView" nav-column-size="2">
-        </div>
-        <div class="view" id="towedGearView" nav-column-size="2">
-        </div>
-        <div class="view" id="gearRecordView" nav-column-size="2">
-        </div>
-        <div class="view" id="unitView" nav-column-size="2">
-        </div>
-        <div class="view" id="fishView" nav-column-size="2">
-        </div>
-        <div class="view" id="fishCaughtView" nav-column-size="2">
-        </div>
+<body>
+  <div id="viewRoot">
+    <div class="view" id="registerView" nav-column-size="1">
+      <div class="centered">
+        <label for="fname">Fisher Identifier</label><br>
+        <input type="text" nav-selectable="true" id="fid" name="fid" value=""><br><br>
+        <label for="lname">Boat ID</label><br>
+        <input type="text" nav-selectable="true" id="bid" name="bid" value="">
+      </div>
     </div>
-
-    <div id="softkey">
-      <label id="left"></label>
-      <label id="center">Submit</label>
-      <label id="right"></label>
+    <div class="view" id="gearView" nav-column-size="2">
     </div>
+    <div class="view" id="staticGearView" nav-column-size="2">
+    </div>
+    <div class="view" id="encirclingGearView" nav-column-size="2">
+    </div>
+    <div class="view" id="towedGearView" nav-column-size="2">
+    </div>
+    <div class="view" id="gearRecordView" nav-column-size="2">
+    </div>
+    <div class="view" id="unitView" nav-column-size="2">
+    </div>
+    <div class="view" id="fishView" nav-column-size="2">
+    </div>
+    <div class="view" id="fishCaughtView" nav-column-size="2">
+    </div>
+    <div class="view" id="mapView">
+    </div>
+  </div>
 
-  </body>
+  <div id="softkey">
+    <label id="left"></label>
+    <label id="center">Submit</label>
+    <label id="right"></label>
+  </div>
+
+</body>
 
 </html>

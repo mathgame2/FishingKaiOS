@@ -39,8 +39,8 @@ function setFishEnterKeyHandlers() {
                 selectedElements[i].setAttribute("image-selected", false);
             }
 
-            // Need to implement swapping in and out of images for fish in this view
             setFirstFishInput();
+            reorderFish();
 
             changeViewTo("fishCaughtView");
         } else if (currentElement.getAttribute('image-selected') === 'true') {
@@ -82,11 +82,15 @@ function setFishEnterKeyHandlers() {
                 STATE.activeView.querySelector("#numberText").textContent = "0";
                 set_tallies();
                 STATE.isCaught = true;
-            }else {
+            } else {
                 STATE.chosenFish = new Array();
-                changeViewTo("gearRecordView");
+                changeViewTo("mapView");
             }
         }
+    }
+
+    document.getElementById("mapView").enterKeyHandler = event => {
+        changeViewTo("gearRecordView");
     }
 }
 
@@ -131,4 +135,13 @@ function add_input_area() {
     container.appendChild(tag);
 
     gridContainer.appendChild(container);
+}
+
+function reorderFish() {
+    const allElements = getAllElements();
+    for (let i = 0; i < STATE.chosenFish.length; i++) {
+        STATE.activeView.insertBefore(STATE.chosenFish[i], allElements[0]);
+    }
+
+
 }
