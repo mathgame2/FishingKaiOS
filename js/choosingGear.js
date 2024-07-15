@@ -4,6 +4,7 @@ window.addEventListener("load", function () {
 })
 
 // Add new gear types here
+// Loads gear images into the correct views
 function populateGear() {
     add_new_gear_icons("../resources/gear/staticGearIcon.png", "Static Gear");
     add_new_gear_icons("../resources/gear/towedGearIcon.png", "Towed Gear");
@@ -43,7 +44,6 @@ function add_new_encircling_gear(file_loc, name) {
 }
 
 
-
 function setGearEnterKeyHandlers() {
     var gridViewContainer = document.getElementById('gearView');
 
@@ -74,19 +74,21 @@ function setGearEnterKeyHandlers() {
         const allElements = getAllElements();
         const currentIndex = getTheIndexOfTheSelectedElement();
         currentElement = allElements[currentIndex];
+        // If done is selected, return back to gearView view
         if (currentElement.id === "done") {
             changeViewTo("gearView");
+            // If not, toggle the currently focused gear
         } else if (currentElement.getAttribute('image-selected') === 'true') {
-
+            // Remove the gear from the selected list if already chosen
             currentElement.setAttribute('image-selected', 'false');
             for (let i = 0; i < STATE.registeredGear.length; i++) {
                 if (STATE.registeredGear[i].querySelector("b").textContent === currentElement.querySelector("b").textContent) {
                     STATE.registeredGear.splice(i, 1);
                 }
-
             }
 
         } else {
+            // Add gear to selected list if not already chosen
             currentElement.setAttribute('image-selected', 'true');
             STATE.registeredGear.push(currentElement);
         }
@@ -96,8 +98,10 @@ function setGearEnterKeyHandlers() {
     document.getElementById('towedGearView').enterKeyHandler = specificGearViewEnterKeyHandler;
     document.getElementById('encirclingGearView').enterKeyHandler = specificGearViewEnterKeyHandler;
 
+
     document.getElementById("gearRecordView").enterKeyHandler = event => {
         const curElement = event.target;
+        // current record is for persistence, currently not fully utilised or implemented except for image loading purposes
         var currentRecord = {};
         currentRecord.gear = curElement.querySelector("b").textContent;
         STATE.currentRecord = currentRecord;
@@ -106,6 +110,7 @@ function setGearEnterKeyHandlers() {
 
 }
 
+// Add the registered gear to the screen for choosing gear
 function populateChosenGear() {
     const gearRecordView = document.getElementById("gearRecordView");
 
@@ -114,6 +119,7 @@ function populateChosenGear() {
         gearRecordView.removeChild(gearRecordView.lastChild);
     }
 
+    // Create new nodes and copy over the information such as image src and text content to the new node
     for (let index = 0; index < STATE.registeredGear.length; index++) {
         const copy = document.createElement('div');
         copy.tabIndex = -1;

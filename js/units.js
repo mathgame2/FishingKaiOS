@@ -1,6 +1,5 @@
 window.addEventListener("load", function () {
     populateUnits();
-    // populateGear();
     setUnitsEnterKeyHandlers();
 })
 
@@ -15,8 +14,10 @@ function add_new_unit(file_loc, name) {
 
 function setUnitsEnterKeyHandlers() {
     const unitView = document.getElementById("unitView");
+
     unitView.enterKeyHandler = event => {
         const curElement = event.target;
+        // Store the current unit chosen for this record
         STATE.currentRecord.unit = curElement.querySelector("b").textContent;
         STATE.currentUnit = curElement;
         changeViewTo("fishView");
