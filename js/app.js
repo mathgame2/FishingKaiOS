@@ -1,9 +1,37 @@
 // Global app state
-var STATE = {}
+var STATE = {
+  // Used for storing a list of fish image boxes that have been chosen while not finalised
+  chosenFish: new Array(),
 
-// Need to declare this script knows these are arrays
-STATE.chosenFish = new Array();
-STATE.registeredGear = new Array();
+  // Used for storing a list of gear image boxes during the process of registering
+  registeredGear: new Array(),
+
+  // Used to store values of the current haul
+  currentRecord: {},
+
+  // Used for swapping between different views
+  views: null,
+
+  // Current active view of the app
+  activeView: null,
+
+  // Used for navigation, contains a list of all the navigable items in the active view
+  naviItems: null,
+
+  // Used for navigation for "up" and "down" to know what value to increment/decrement by
+  activeColumnSize: null,
+
+  // Used when recording amount of fish caught, tracks whether the current value is total caught or returned to sea
+  isCaught: false,
+
+  // Used when recording amount of fish caught
+  // Tracks the index of the current fish in the chosenFish array that we are recording for
+  fishIndex: null,
+
+  // A reference to the reference box of the current unit being chosen for the haul
+  // Used for copy over the image src etc. to the record view
+  currentUnit: null,
+}
 
 
 window.addEventListener("load", function () {
@@ -26,8 +54,6 @@ window.addEventListener("load", function () {
 
   }
 
-  STATE.activeViewID = 0;
-  STATE.activeViewName = STATE.activeView.getAttribute("id");
 
   // Add 'active' class to the landing view so that it is visible
   STATE.activeView.classList.add('active');
@@ -39,8 +65,6 @@ window.addEventListener("load", function () {
   const firstElement = STATE.activeView.querySelectorAll("[nav-selectable]")[0];
 
   firstElement.setAttribute("nav-selected", "true");
-  firstElement.setAttribute("nav-index", "0");
-
   firstElement.focus();
 
   setColumnNumber();
@@ -94,9 +118,8 @@ const selectElement = setIndex => {
   const nextElement = getAllElements()[setIndex];
 
   prevElement.setAttribute("nav-selected", false);
-  prevElement.blur();
-
   nextElement.setAttribute("nav-selected", true);
+  
   nextElement.focus();
 
 }
@@ -249,8 +272,6 @@ function changeViewTo(viewName) {
 
       // Set new view to active so it becomes visible
       STATE.activeView = STATE.views[index];
-      STATE.activeViewID = index;
-      STATE.activeViewName = STATE.activeView.id;
       STATE.activeView.classList.add('active')
 
       setNaviItems();
@@ -361,7 +382,7 @@ function setSoftKeys() {
   const left = softKeyBar.querySelector("#left");
   const right = softKeyBar.querySelector("#right");
   const center = softKeyBar.querySelector("#center");
-  switch (STATE.activeViewName) {
+  switch (STATE.activeView.id) {
     case "registerView":
     case "fishCaughtView":
     case "mapView":
