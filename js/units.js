@@ -4,12 +4,13 @@ window.addEventListener("load", function () {
 })
 
 function populateUnits(){
-    add_new_unit("../resources/units/kg.png", "Kg");
-    add_new_unit("../resources/units/bushel.png", "Bushel");
+    for (let i = 0; i < unitsConfig.length; i++) {
+        add_new_unit(unitsConfig[i].filePath, unitsConfig[i].unitName, unitsConfig[i].id);   
+    }
 }
 
-function add_new_unit(file_loc, name) {
-    add_new_choice("unitView", "imageBox", file_loc, name);
+function add_new_unit(file_loc, name, localID) {
+    add_new_image_box("unitView", localID, file_loc, name);
 }
 
 function setUnitsEnterKeyHandlers() {

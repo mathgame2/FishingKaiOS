@@ -12,15 +12,18 @@
 
   <!-- Inline scripts are forbidden in Firefox OS apps (CSP restrictions),
          so we use a script file. -->
+  <script type="text/javascript" src="js/config.js" defer></script>
   <script type="text/javascript" src="js/app.js" defer></script>
   <script type="text/javascript" src="js/choosingGear.js" defer></script>
   <script type="text/javascript" src="js/units.js" defer></script>
   <script type="text/javascript" src="js/fish.js" defer></script>
 
+
+
 </head>
 
 <body>
-  <div id="viewRoot">
+  <div id="rootView">
     <!-- nav-column-size is necessary for navigation purposes
       to know how many indices to move when going up or down -->
     <div class="view" id="registerView" nav-column-size="1">
@@ -32,12 +35,6 @@
       </div>
     </div>
     <div class="view" id="gearView" nav-column-size="2">
-    </div>
-    <div class="view" id="staticGearView" nav-column-size="2">
-    </div>
-    <div class="view" id="encirclingGearView" nav-column-size="2">
-    </div>
-    <div class="view" id="towedGearView" nav-column-size="2">
     </div>
     <div class="view" id="gearRecordView" nav-column-size="2">
     </div>

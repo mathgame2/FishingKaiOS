@@ -1,3 +1,8 @@
+// import fishes from "../config/fish.json";
+// Cannot import as import is too early for this version of firefox os.....
+// Checked, KaiOS 2.5.1.1 runs Firefox 48 by running navigator.userAgent in console
+// Any feature needs to be supported by Firefox 48 and earlier. Good luck :)
+
 // Global app state
 var STATE = {
   // Used for storing a list of fish image boxes that have been chosen while not finalised
@@ -35,13 +40,13 @@ var STATE = {
 
 
 window.addEventListener("load", function () {
-  var viewRoot = document.getElementById("viewRoot");
+  var viewRoot = document.getElementById("rootView");
 
   STATE.views = viewRoot.querySelectorAll(".view");
   // First view should be registration view
   // Will need to implement logic (including persistence) to select landing view if already registered
   STATE.activeView = STATE.views[0];
-
+  
   // Function for transferring to next view
   STATE.activeView.enterKeyHandler = event => {
     // Make sure both inputs areas are not blank
@@ -57,7 +62,6 @@ window.addEventListener("load", function () {
 
   // Add 'active' class to the landing view so that it is visible
   STATE.activeView.classList.add('active');
-
   // Get all the navigation items of this view
   STATE.naviItems = STATE.activeView.querySelectorAll("[nav-selectable]");
 
@@ -119,7 +123,7 @@ const selectElement = setIndex => {
 
   prevElement.setAttribute("nav-selected", false);
   nextElement.setAttribute("nav-selected", true);
-  
+
   nextElement.focus();
 
 }
@@ -241,7 +245,7 @@ function addDoneButton(gridContainerID) {
   // Add the elements to the box
   container.appendChild(entry);
   container.appendChild(tag);
-  container.id = "done";
+  container.setAttribute('localid', '-1');
 
   gridContainer.appendChild(container);
 }
@@ -292,23 +296,25 @@ function changeViewTo(viewName) {
 }
 
 // Add a new navigable  image box item to a specific grid container, a file location for the image and the name of the image
-function add_new_choice(gridContainerID, containerClassName, file_loc, name) {
+// Local ID is the integer id of the item in it's group (i.e. gears or fish)
+function add_new_image_box(gridContainerID, localID, file_loc, subtitle) {
   var gridContainer = document.getElementById(gridContainerID);
 
   // Create the relevant html tag elements
   var container = document.createElement("div");
   var tag = document.createElement("b");
-  tag.textContent = name;
+  tag.textContent = subtitle;
   var entry = document.createElement("img");
 
   entry.src = file_loc;
-  entry.alt = name;
+  entry.alt = subtitle;
 
   // Needed to make the box focusable
   container.tabIndex = -1;
 
   // Set the relevant information for the box
-  container.className = containerClassName;
+  container.className = "imageBox";
+  container.setAttribute('localID', localID);
   container.setAttribute('nav-selectable', 'true');
   container.setAttribute('image-selected', 'false');
 

@@ -4,23 +4,14 @@ window.addEventListener("load", function () {
 })
 
 function populateFish() {
-    add_new_fish("../resources/fish/crab.png", "Crab");
-    add_new_fish("../resources/fish/lobster.png", "Lobster");
-
-    add_new_fish("../resources/fish/fish1.png", "Fish 1");
-    add_new_fish("../resources/fish/fish2.png", "Fish 2");
-    add_new_fish("../resources/fish/fish3.png", "Fish 3");
-    add_new_fish("../resources/fish/fish4.png", "Fish 4");
-    add_new_fish("../resources/fish/fish5.png", "Fish 5");
-    add_new_fish("../resources/fish/fish6.png", "Fish 6");
-    add_new_fish("../resources/fish/fish7.png", "Fish 7");
-
+    for (let i = 0; i < fishesConfig.length; i++) {
+        add_new_fish(fishesConfig[i].filePath, fishesConfig[i].speciesName, fishesConfig[i].id)
+    }
     addDoneButton("fishView");
-
 }
 
-function add_new_fish(file_loc, name) {
-    add_new_choice("fishView", "imageBox", file_loc, name);
+function add_new_fish(file_loc, name, localId) {
+    add_new_image_box("fishView", localId, file_loc, name);
 }
 
 function setFishEnterKeyHandlers() {
@@ -31,7 +22,7 @@ function setFishEnterKeyHandlers() {
         const currentIndex = getTheIndexOfTheSelectedElement();
         const currentElement = allElements[currentIndex];
 
-        if (currentElement.id === "done") {
+        if (parseInt(event.target.getAttribute("localid")) === -1) {
             // Clear all selected elements for next time
             const selectedElements = STATE.activeView.querySelectorAll("[image-selected=true]");
             for (let i = 0; i < selectedElements.length; i++) {
@@ -46,10 +37,9 @@ function setFishEnterKeyHandlers() {
             // If already selected, toggle unselected and remove from selected list
             currentElement.setAttribute('image-selected', 'false');
             for (let i = 0; i < STATE.chosenFish.length; i++) {
-                if (STATE.chosenFish[i].querySelector("b").textContent === currentElement.querySelector("b").textContent) {
+                if (STATE.chosenFish[i].getAttribute("localid") === currentElement.getAttribute("localid")) {
                     STATE.chosenFish.splice(i, 1);
                 }
-
             }
 
         } else {
@@ -92,7 +82,7 @@ function setFishEnterKeyHandlers() {
                 // reset tallies
                 STATE.activeView.querySelector("#numberText").textContent = "0";
                 set_tallies();
-                
+
                 STATE.isCaught = true;
             } else {
                 // if no more fish, clear chosen fish and move on

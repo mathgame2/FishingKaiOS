@@ -15,7 +15,7 @@ body {
     box-sizing: inherit;
 }
 
-#viewRoot {
+#rootView {
     height: 90vh;
 }
 
