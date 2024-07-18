@@ -1,6 +1,7 @@
 window.addEventListener("load", function () {
     populateGear();
     setGearEnterKeyHandlers();
+    setGearSoftleftKeyHandlers();
 })
 
 // Add new gear types here
@@ -90,6 +91,26 @@ function setGearEnterKeyHandlers() {
         changeViewTo("unitView");
     }
 
+}
+
+function setGearSoftleftKeyHandlers(){
+    var gridViewContainer = document.getElementById('gearView');
+
+    gridViewContainer.softleftKeyHandler = event => {
+        changeViewTo("registerView");
+    }
+
+    const specificGearViewSoftLeftKeyHandler = event => {
+        changeViewTo("gearView");
+    };
+
+    for (let i = 0; i < gearConfig.length; i++) {
+        document.getElementById(gearConfig[i].viewName).softleftKeyHandler = specificGearViewSoftLeftKeyHandler;
+    }
+
+    document.getElementById("gearRecordView").softleftKeyHandler = event => {
+        changeViewTo("gearView")
+    }
 }
 
 // Add the registered gear to the screen for choosing gear

@@ -6,7 +6,7 @@ var STATE = {
   // Used for storing a list of fish image boxes that have been chosen while not finalised
   chosenFish: new Array(),
 
-  // Used for storing a list of gear image boxes during the process of registering
+  // Used for storing a list of string gear ids during the process of registering
   registeredGear: new Array(),
 
   // Used to store values of the current haul
@@ -87,6 +87,7 @@ window.addEventListener("load", function () {
 
   setColumnNumber();
   setNavIndices();
+  setSoftKeys()
 
 });
 
@@ -112,6 +113,9 @@ window.addEventListener('keydown', function (e) {
     case 'ArrowRight':
     case '6':
       Right(e);
+      break;
+    case 'SoftLeft':
+      STATE.activeView.softleftKeyHandler();
       break;
   }
 })
@@ -151,7 +155,7 @@ const Right = event => {
 
     // Set the new count
     STATE.activeView.querySelector("#numberText").textContent = count.toString();
-    set_tallies(count);
+    setTallies(count);
   } else if (document.activeElement.tagName.toLowerCase() !== 'input') {
 
     const allElements = getAllElements();
@@ -175,7 +179,7 @@ const Left = event => {
 
     // Set the new count
     STATE.activeView.querySelector("#numberText").textContent = count.toString();
-    set_tallies(count);
+    setTallies(count);
   } else if (document.activeElement.tagName.toLowerCase() !== 'input') {
     const allElements = getAllElements();
     const currentIndex = getTheIndexOfTheSelectedElement();
@@ -197,7 +201,7 @@ const Down = event => {
 
     // Set the new count
     STATE.activeView.querySelector("#numberText").textContent = count.toString();
-    set_tallies(count);
+    setTallies(count);
   } else {
 
     const allElements = getAllElements();
@@ -220,7 +224,7 @@ const Up = event => {
 
     // Set the new count
     STATE.activeView.querySelector("#numberText").textContent = count.toString();
-    set_tallies(count);
+    setTallies(count);
   } else {
     const allElements = getAllElements();
     const currentIndex = getTheIndexOfTheSelectedElement();
@@ -339,7 +343,7 @@ function addNewImageBox(gridContainerID, localID, file_loc, subtitle) {
 }
 
 // Add a new image box that is not navigable
-function add_static_image_box(gridContainerID, id, file_loc, name) {
+function addStaticImageBox(gridContainerID, id, file_loc, name) {
   var gridContainer = document.getElementById(gridContainerID);
 
   var container = document.createElement("div");
@@ -359,8 +363,8 @@ function add_static_image_box(gridContainerID, id, file_loc, name) {
 }
 
 // Expects current view to be fishCaughtView, sets the correct number of tally marks
-function set_tallies(count) {
-  const tallies = STATE.activeView.querySelector("#tallyText");
+function setTallies(count) {
+  const tallies = document.getElementById("fishCaughtView").querySelector("#tallyText");
   // Clear children nodes (clearing all tallies)
   while (tallies.firstChild) {
     tallies.removeChild(tallies.lastChild);
@@ -376,24 +380,24 @@ function set_tallies(count) {
     tallies.appendChild(space);
   }
 
-  let tally = document.createElement("b");
+  let remainderTally = document.createElement("b");
 
   // For the remainder, insert the correct number of tallies.
   switch (count % 5) {
     case 1:
-      tally.textContent = "|"
+      remainderTally.textContent = "|"
       break;
     case 2:
-      tally.textContent = "||"
+      remainderTally.textContent = "||"
       break;
     case 3:
-      tally.textContent = "|||"
+      remainderTally.textContent = "|||"
       break;
     case 4:
-      tally.textContent = "||||"
+      remainderTally.textContent = "||||"
       break;
   }
-  tallies.appendChild(tally)
+  tallies.appendChild(remainderTally)
 }
 
 // Set the soft key bar text content base on which view
@@ -404,9 +408,13 @@ function setSoftKeys() {
   const center = softKeyBar.querySelector("#center");
   switch (STATE.activeView.id) {
     case "registerView":
+      left.textContent = "";
+      right.textContent = "";
+      center.textContent = "Submit"
+      break;
     case "fishCaughtView":
     case "mapView":
-      left.textContent = "";
+      left.textContent = "Back";
       right.textContent = "";
       center.textContent = "Submit"
       break;
@@ -417,7 +425,7 @@ function setSoftKeys() {
     case "gearRecordView":
     case "unitView":
     case "fishView":
-      left.textContent = "";
+      left.textContent = "Back";
       right.textContent = "";
       center.textContent = "Select"
       break;

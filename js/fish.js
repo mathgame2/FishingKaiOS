@@ -1,23 +1,24 @@
 window.addEventListener("load", function () {
     populateFish();
     setFishEnterKeyHandlers();
+    setFishSoftLeftKeyHandlers();
 })
 
 function populateFish() {
     const storedOrder = JSON.parse(localStorage.getItem("fishOrder"));
     if (storedOrder) {
         for (let i = 0; i < storedOrder.length; i++) {
-            add_new_fish(fishesConfig[storedOrder[i]].filePath, fishesConfig[storedOrder[i]].speciesName, fishesConfig[storedOrder[i]].id);
+            addNewFish(fishesConfig[storedOrder[i]].filePath, fishesConfig[storedOrder[i]].speciesName, fishesConfig[storedOrder[i]].id);
         }
     } else {
         for (let i = 0; i < fishesConfig.length; i++) {
-            add_new_fish(fishesConfig[i].filePath, fishesConfig[i].speciesName, fishesConfig[i].id)
+            addNewFish(fishesConfig[i].filePath, fishesConfig[i].speciesName, fishesConfig[i].id)
         }
     }
     addDoneButton("fishView");
 }
 
-function add_new_fish(file_loc, name, localId) {
+function addNewFish(file_loc, name, localId) {
     addNewImageBox("fishView", localId, file_loc, name);
 }
 
@@ -30,9 +31,11 @@ function setFishEnterKeyHandlers() {
         const currentElement = allElements[currentIndex];
 
         if (parseInt(event.target.getAttribute("localid")) === -1) {
+                STATE.chosenFish = [];
             // Clear all selected elements for next time
             const selectedElements = STATE.activeView.querySelectorAll("[image-selected=true]");
             for (let i = 0; i < selectedElements.length; i++) {
+                STATE.chosenFish.push(selectedElements[i]);
                 selectedElements[i].setAttribute("image-selected", false);
             }
 
@@ -43,16 +46,9 @@ function setFishEnterKeyHandlers() {
         } else if (currentElement.getAttribute('image-selected') === 'true') {
             // If already selected, toggle unselected and remove from selected list
             currentElement.setAttribute('image-selected', 'false');
-            for (let i = 0; i < STATE.chosenFish.length; i++) {
-                if (STATE.chosenFish[i].getAttribute("localid") === currentElement.getAttribute("localid")) {
-                    STATE.chosenFish.splice(i, 1);
-                }
-            }
-
         } else {
             // If not selected, select and add to selected list
             currentElement.setAttribute('image-selected', 'true');
-            STATE.chosenFish.push(currentElement);
         }
     };
 
@@ -75,7 +71,7 @@ function setFishEnterKeyHandlers() {
 
             // reset tallies
             STATE.activeView.querySelector("#numberText").textContent = "0";
-            set_tallies();
+            setTallies(0);
             STATE.isCaught = false;
         } else {
 
@@ -89,7 +85,7 @@ function setFishEnterKeyHandlers() {
                 let fishBox = document.getElementById("fishType");
                 let fish = STATE.chosenFish[STATE.fishIndex];
                 fishBox.querySelector("b").textContent = fish.querySelector("img").alt;
-                fishBox.querySelector("img").src = fish.querySelector("img").src
+                fishBox.querySelector("img").src = fish.querySelector("img").src;
 
                 // change to fish caught
                 const box = document.getElementById("caughtOrThrown");
@@ -98,12 +94,11 @@ function setFishEnterKeyHandlers() {
 
                 // reset tallies
                 STATE.activeView.querySelector("#numberText").textContent = "0";
-                set_tallies();
+                setTallies(0);
 
                 STATE.isCaught = true;
             } else {
                 // if no more fish, clear chosen fish and move on
-                STATE.chosenFish = new Array();
                 changeViewTo("mapView");
             }
         }
@@ -111,6 +106,65 @@ function setFishEnterKeyHandlers() {
 
     document.getElementById("mapView").enterKeyHandler = event => {
         changeViewTo("gearRecordView");
+    }
+}
+
+function setFishSoftLeftKeyHandlers() {
+    document.getElementById("fishView").softleftKeyHandler = event => {
+        changeViewTo("unitView");
+    };
+
+    document.getElementById("fishCaughtView").softleftKeyHandler = event => {
+
+        // Whether the current data is for total caught fish or fish returned to sea
+        if (STATE.isCaught) {
+
+            if (STATE.fishIndex === 0) {
+                STATE.currentRecord.fishesCaught = [];
+                STATE.chosenFish = [];
+                changeViewTo("fishView");
+            } else {
+
+                STATE.fishIndex--;
+                STATE.currentRecord.fishesCaught.pop();
+
+                // change to fish caught
+                const box = document.getElementById("caughtOrThrown");
+                box.querySelector("b").textContent = "Fish Thrown"
+                box.querySelector("img").src = "../resources/fishBackToSea.png"
+
+                // change to the previous fish
+                let fishBox = document.getElementById("fishType");
+                let fish = STATE.chosenFish[STATE.fishIndex];
+                fishBox.querySelector("b").textContent = fish.querySelector("img").alt;
+                fishBox.querySelector("img").src = fish.querySelector("img").src;
+
+                const prevNumberOfUnitsReturned = STATE.currentRecord.fishesCaught[STATE.currentRecord.fishesCaught.length - 1].numberOfUnitsReturned;
+                STATE.activeView.querySelector("#numberText").textContent = prevNumberOfUnitsReturned;
+                setTallies(parseInt(prevNumberOfUnitsReturned));
+
+                STATE.isCaught = false;
+            }
+
+
+        } else {
+
+            // change to fish caught
+            const box = document.getElementById("caughtOrThrown");
+            box.querySelector("b").textContent = "Fish Caught"
+            box.querySelector("img").src = "../resources/fishInNet.png"
+
+            const prevNumberOfUnitsCaught = STATE.currentRecord.fishesCaught[STATE.currentRecord.fishesCaught.length - 1].numberOfUnitsCaught;
+            STATE.activeView.querySelector("#numberText").textContent = prevNumberOfUnitsCaught;
+            setTallies(parseInt(prevNumberOfUnitsCaught));
+
+            STATE.isCaught = true;
+
+        }
+    }
+
+    document.getElementById("mapView").softleftKeyHandler = event => {
+        changeViewTo("fishCaughtView");
     }
 }
 
@@ -127,14 +181,14 @@ function setFirstFishInput() {
     STATE.fishIndex = 0;
     const unit = unitsConfig[STATE.currentRecord.unitID];
 
-    add_static_image_box("fishCaughtView", "fishType", fishesConfig[fishID].filePath, fishesConfig[fishID].speciesName);
-    add_static_image_box("fishCaughtView", "caughtOrThrown", "../resources/fishInNet.png", "Fish Caught");
-    add_input_area();
-    add_static_image_box("fishCaughtView", "unitBox", unit.filePath, unit.unitName);
+    addStaticImageBox("fishCaughtView", "fishType", fishesConfig[fishID].filePath, fishesConfig[fishID].speciesName);
+    addStaticImageBox("fishCaughtView", "caughtOrThrown", "../resources/fishInNet.png", "Fish Caught");
+    addInputArea();
+    addStaticImageBox("fishCaughtView", "unitBox", unit.filePath, unit.unitName);
 }
 
 // Add the input area which keeps track of the tallies
-function add_input_area() {
+function addInputArea() {
     var gridContainer = document.getElementById("fishCaughtView");
 
     var container = document.createElement("div");

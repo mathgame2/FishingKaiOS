@@ -1,6 +1,7 @@
 window.addEventListener("load", function () {
     populateUnits();
     setUnitsEnterKeyHandlers();
+    setUnitsSoftleftKeyHandlers();
 })
 
 function populateUnits(){
@@ -22,4 +23,13 @@ function setUnitsEnterKeyHandlers() {
         STATE.currentRecord.unitID = parseInt(curElement.getAttribute("localid"));
         changeViewTo("fishView");
     }
+}
+
+function setUnitsSoftleftKeyHandlers() {
+    const unitView = document.getElementById("unitView");
+
+    unitView.softleftKeyHandler = event => {
+        changeViewTo("gearRecordView");
+    }
+    
 }
