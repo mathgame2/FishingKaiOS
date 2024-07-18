@@ -63,7 +63,7 @@ const fishesConfig = [
 ]
 
 // Ids of specific gears need to be unique across gear types
-// Ids for gear types are independent for specific gears, these ids are used for dynamically creating traversal
+// Ids for gear types are independent for specific gears, these ids are used for dynamically creating traversal for registration
 const gearConfig = [
     {
         "gearType": "Static Gear",

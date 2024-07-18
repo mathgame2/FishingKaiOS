@@ -4,14 +4,21 @@ window.addEventListener("load", function () {
 })
 
 function populateFish() {
-    for (let i = 0; i < fishesConfig.length; i++) {
-        add_new_fish(fishesConfig[i].filePath, fishesConfig[i].speciesName, fishesConfig[i].id)
+    const storedOrder = JSON.parse(localStorage.getItem("fishOrder"));
+    if (storedOrder) {
+        for (let i = 0; i < storedOrder.length; i++) {
+            add_new_fish(fishesConfig[storedOrder[i]].filePath, fishesConfig[storedOrder[i]].speciesName, fishesConfig[storedOrder[i]].id);
+        }
+    } else {
+        for (let i = 0; i < fishesConfig.length; i++) {
+            add_new_fish(fishesConfig[i].filePath, fishesConfig[i].speciesName, fishesConfig[i].id)
+        }
     }
     addDoneButton("fishView");
 }
 
 function add_new_fish(file_loc, name, localId) {
-    add_new_image_box("fishView", localId, file_loc, name);
+    addNewImageBox("fishView", localId, file_loc, name);
 }
 
 function setFishEnterKeyHandlers() {
@@ -58,11 +65,21 @@ function setFishEnterKeyHandlers() {
             box.querySelector("b").textContent = "Fish Thrown"
             box.querySelector("img").src = "../resources/fishBackToSea.png"
 
+            const newCatch = {
+                id: STATE.chosenFish[STATE.fishIndex].getAttribute("localid"),
+                numberOfUnitsCaught: parseInt(STATE.activeView.querySelector("#numberText").textContent),
+                numberOfUnitsReturned: null,
+            }
+
+            STATE.currentRecord.fishesCaught.push(newCatch);
+
             // reset tallies
             STATE.activeView.querySelector("#numberText").textContent = "0";
             set_tallies();
             STATE.isCaught = false;
         } else {
+
+            STATE.currentRecord.fishesCaught[STATE.currentRecord.fishesCaught.length - 1].numberOfUnitsReturned = parseInt(STATE.activeView.querySelector("#numberText").textContent);
 
             // Check if there are more selected fish
             if (STATE.fishIndex < STATE.chosenFish.length - 1) {
@@ -105,14 +122,15 @@ function setFirstFishInput() {
     view.innerHTML = "";
 
     // Set the first fish
-    const fish = STATE.chosenFish[0];
+    const fishID = parseInt(STATE.chosenFish[0].getAttribute("localid"));
     STATE.isCaught = true;
     STATE.fishIndex = 0;
+    const unit = unitsConfig[STATE.currentRecord.unitID];
 
-    add_static_image_box("fishCaughtView", "fishType", fish.querySelector("img").src, fish.querySelector("img").alt);
+    add_static_image_box("fishCaughtView", "fishType", fishesConfig[fishID].filePath, fishesConfig[fishID].speciesName);
     add_static_image_box("fishCaughtView", "caughtOrThrown", "../resources/fishInNet.png", "Fish Caught");
     add_input_area();
-    add_static_image_box("fishCaughtView", "unitBox", STATE.currentUnit.querySelector("img").src, STATE.currentUnit.querySelector("img").alt)
+    add_static_image_box("fishCaughtView", "unitBox", unit.filePath, unit.unitName);
 }
 
 // Add the input area which keeps track of the tallies
@@ -146,10 +164,18 @@ function add_input_area() {
 // Reorder the fish based on previous selections
 // Bump the selected fish to the top of the list
 function reorderFish() {
-    const allElements = getAllElements();
+    let allElements = getAllElements();
+    STATE.fishOrder = [];
     for (let i = 0; i < STATE.chosenFish.length; i++) {
         STATE.activeView.insertBefore(STATE.chosenFish[i], allElements[0]);
     }
 
+    allElements = getAllElements();
+    // -1 to ignore done button
+    for (let i = 0; i < allElements.length - 1; i++) {
+        STATE.fishOrder.push(parseInt(allElements[i].getAttribute("localid")));
+    }
+
+    localStorage.setItem("fishOrder", JSON.stringify(STATE.fishOrder));
 
 }

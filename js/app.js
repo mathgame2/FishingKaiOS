@@ -1,6 +1,4 @@
-// import fishes from "../config/fish.json";
-// Cannot import as import is too early for this version of firefox os.....
-// Checked, KaiOS 2.5.1.1 runs Firefox 48 by running navigator.userAgent in console
+// KaiOS 2.5.1.1 runs Firefox 48. Can repeat by running navigator.userAgent in console
 // Any feature needs to be supported by Firefox 48 and earlier. Good luck :)
 
 // Global app state
@@ -12,7 +10,14 @@ var STATE = {
   registeredGear: new Array(),
 
   // Used to store values of the current haul
-  currentRecord: {},
+  currentRecord: {
+    gearID: null,
+    haulID: null,
+    unitID: null,
+    fishesCaught: new Array(),
+    dateOfCatch: null,
+    locationOfCatch: null,
+  },
 
   // Used for swapping between different views
   views: null,
@@ -36,6 +41,8 @@ var STATE = {
   // A reference to the reference box of the current unit being chosen for the haul
   // Used for copy over the image src etc. to the record view
   currentUnit: null,
+
+  fishOrder: new Array(),
 }
 
 
@@ -44,16 +51,23 @@ window.addEventListener("load", function () {
 
   STATE.views = viewRoot.querySelectorAll(".view");
   // First view should be registration view
-  // Will need to implement logic (including persistence) to select landing view if already registered
-  STATE.activeView = STATE.views[0];
-  
-  // Function for transferring to next view
-  STATE.activeView.enterKeyHandler = event => {
-    // Make sure both inputs areas are not blank
-    const fisher_id = this.document.getElementById("fid");
-    const boat_id = this.document.getElementById("bid");
+  if (!localStorage.getItem("registered")) {
+    STATE.activeView = STATE.views[0];
+  } else {
+    STATE.registeredGear = JSON.parse(this.localStorage.getItem("registeredGear"));
+    populateChosenGear();
+    STATE.activeView = document.getElementById("gearRecordView");
+  }
 
-    if (fisher_id.value && boat_id.value) {
+  // Function for transferring to next view
+  document.getElementById("registerView").enterKeyHandler = event => {
+    // Make sure both inputs areas are not blank
+    const fisherID = this.document.getElementById("fid");
+    const boatID = this.document.getElementById("bid");
+
+    if (fisherID.value && boatID.value) {
+      localStorage.setItem("fisherID", fisherID.value);
+      this.localStorage.setItem("boatID", boatID.value);
       changeViewTo("gearView");
     }
 
@@ -77,7 +91,7 @@ window.addEventListener("load", function () {
 });
 
 // Key handler for button presses
-window.addEventListener('keyup', function (e) {
+window.addEventListener('keydown', function (e) {
   switch (e.key) {
     case 'Enter':
     case '5':
@@ -297,7 +311,7 @@ function changeViewTo(viewName) {
 
 // Add a new navigable  image box item to a specific grid container, a file location for the image and the name of the image
 // Local ID is the integer id of the item in it's group (i.e. gears or fish)
-function add_new_image_box(gridContainerID, localID, file_loc, subtitle) {
+function addNewImageBox(gridContainerID, localID, file_loc, subtitle) {
   var gridContainer = document.getElementById(gridContainerID);
 
   // Create the relevant html tag elements

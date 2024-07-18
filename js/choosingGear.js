@@ -29,14 +29,14 @@ function createNewGearTypeView(viewName, gearType, filePath, typeID) {
     view.id = viewName;
     view.setAttribute("nav-column-size", "2");
 
-    add_new_image_box("gearView", typeID, filePath, gearType);
+    addNewImageBox("gearView", typeID, filePath, gearType);
 
     return view;
 }
 
 function attachGearsToView(gearView, gears) {
     for (let i = 0; i < gears.length; i++) {
-        add_new_image_box(gearView.id, gears[i].id, gears[i].filePath, gears[i].gearName)
+        addNewImageBox(gearView.id, gears[i].id, gears[i].filePath, gears[i].gearName)
     }
 }
 
@@ -47,6 +47,7 @@ function setGearEnterKeyHandlers() {
         const gearViewIndex = parseInt(event.target.getAttribute("localid"));
         if (gearViewIndex === -1) {
             populateChosenGear();
+            storeChosenGear();
             changeViewTo("gearRecordView");
         } else {
             changeViewTo(gearConfig[gearViewIndex].viewName);
@@ -57,6 +58,7 @@ function setGearEnterKeyHandlers() {
         const allElements = getAllElements();
         const currentIndex = getTheIndexOfTheSelectedElement();
         const currentElement = allElements[currentIndex];
+        const currentElementId = currentElement.getAttribute("localid");
 
         // If done is selected, return back to gearView view
         if (parseInt(event.target.getAttribute("localid")) === -1) {
@@ -66,28 +68,25 @@ function setGearEnterKeyHandlers() {
             // Remove the gear from the selected list if already chosen
             currentElement.setAttribute('image-selected', 'false');
             for (let i = 0; i < STATE.registeredGear.length; i++) {
-                if (STATE.registeredGear[i].getAttribute("localid") === currentElement.getAttribute("localid")) {
+                if (STATE.registeredGear[i] === currentElementId) {
                     STATE.registeredGear.splice(i, 1);
                 }
             }
         } else {
             // Add gear to selected list if not already chosen
             currentElement.setAttribute('image-selected', 'true');
-            STATE.registeredGear.push(currentElement);
+            STATE.registeredGear.push(currentElementId);
         }
     };
 
-    document.getElementById('staticGearView').enterKeyHandler = specificGearViewEnterKeyHandler;
-    document.getElementById('towedGearView').enterKeyHandler = specificGearViewEnterKeyHandler;
-    document.getElementById('encirclingGearView').enterKeyHandler = specificGearViewEnterKeyHandler;
-
+    for (let i = 0; i < gearConfig.length; i++) {
+        document.getElementById(gearConfig[i].viewName).enterKeyHandler = specificGearViewEnterKeyHandler;
+    }
 
     document.getElementById("gearRecordView").enterKeyHandler = event => {
         const curElement = event.target;
         // current record is for persistence, currently not fully utilised or implemented except for image loading purposes
-        var currentRecord = {};
-        currentRecord.gear = curElement.querySelector("b").textContent;
-        STATE.currentRecord = currentRecord;
+        STATE.currentRecord.gearID = parseInt(curElement.getAttribute("localid"));
         changeViewTo("unitView");
     }
 
@@ -102,16 +101,23 @@ function populateChosenGear() {
         gearRecordView.removeChild(gearRecordView.lastChild);
     }
 
-    // Create new nodes and copy over the information such as image src and text content to the new node
-    for (let index = 0; index < STATE.registeredGear.length; index++) {
-        const copy = document.createElement('div');
-        copy.tabIndex = -1;
+    for (let i = 0; i < STATE.registeredGear.length; i++) {
+        const gearInfo = findGearWithId(parseInt(STATE.registeredGear[i]));
+        addNewImageBox("gearRecordView", gearInfo.id, gearInfo.filePath, gearInfo.gearName);
+    }
+}
 
-        copy.className = "imageBox";
+function storeChosenGear(){
+    localStorage.setItem("registeredGear", JSON.stringify(STATE.registeredGear));
+    localStorage.setItem("registered", "true");
+}
 
-        copy.setAttribute('nav-selectable', 'true');
-        copy.setAttribute('selected', 'false');
-        copy.innerHTML = STATE.registeredGear[index].innerHTML;
-        gearRecordView.appendChild(copy);
+function findGearWithId(id){
+    for (let i = 0; i < gearConfig.length; i++) {
+        for (let j = 0; j < gearConfig[i].gears.length; j++) {
+            if (gearConfig[i].gears[j].id === id) {
+                return gearConfig[i].gears[j];
+            }
+        }
     }
 }
