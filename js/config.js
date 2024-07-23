@@ -3,12 +3,12 @@
 
 const unitsConfig = [
     {
-        "id": "0",
+        "id": 0,
         "filePath": "../resources/units/kg.png",
         "unitName": "KG"
     },
     {
-        "id": "1",
+        "id": 1,
         "filePath": "../resources/units/bushel.png",
         "unitName": "Bushel"
     }

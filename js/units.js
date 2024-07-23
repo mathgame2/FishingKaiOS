@@ -33,3 +33,11 @@ function setUnitsSoftleftKeyHandlers() {
     }
     
 }
+
+function findUnitWithId(id) {
+    for (let i = 0; i < unitsConfig.length; i++) {
+        if (unitsConfig[i].id === id) {
+            return unitsConfig[i];
+        }
+    }
+}

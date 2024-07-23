@@ -6,11 +6,16 @@ window.addEventListener("load", function () {
 
 function populateFish() {
     const storedOrder = JSON.parse(localStorage.getItem("fishOrder"));
+
+    // Check if a stored order already exist
     if (storedOrder) {
+        // Load the stored order
         for (let i = 0; i < storedOrder.length; i++) {
-            addNewFish(fishesConfig[storedOrder[i]].filePath, fishesConfig[storedOrder[i]].speciesName, fishesConfig[storedOrder[i]].id);
+            const fishInfo = findFishWithId(parseInt(storedOrder[i]));
+            addNewFish(fishInfo.filePath, fishInfo.speciesName, fishInfo.id);
         }
     } else {
+        // Load the initial order
         for (let i = 0; i < fishesConfig.length; i++) {
             addNewFish(fishesConfig[i].filePath, fishesConfig[i].speciesName, fishesConfig[i].id)
         }
@@ -31,7 +36,8 @@ function setFishEnterKeyHandlers() {
         const currentElement = allElements[currentIndex];
 
         if (parseInt(event.target.getAttribute("localid")) === -1) {
-                STATE.chosenFish = [];
+            STATE.chosenFish = [];
+
             // Clear all selected elements for next time
             const selectedElements = STATE.activeView.querySelectorAll("[image-selected=true]");
             for (let i = 0; i < selectedElements.length; i++) {
@@ -61,6 +67,7 @@ function setFishEnterKeyHandlers() {
             box.querySelector("b").textContent = "Fish Thrown"
             box.querySelector("img").src = "../resources/fishBackToSea.png"
 
+            // Create a new catch record
             const newCatch = {
                 id: STATE.chosenFish[STATE.fishIndex].getAttribute("localid"),
                 numberOfUnitsCaught: parseInt(STATE.activeView.querySelector("#numberText").textContent),
@@ -74,7 +81,7 @@ function setFishEnterKeyHandlers() {
             setTallies(0);
             STATE.isCaught = false;
         } else {
-
+            // Fetch the latest created record and add the number of units returned
             STATE.currentRecord.fishesCaught[STATE.currentRecord.fishesCaught.length - 1].numberOfUnitsReturned = parseInt(STATE.activeView.querySelector("#numberText").textContent);
 
             // Check if there are more selected fish
@@ -118,7 +125,7 @@ function setFishSoftLeftKeyHandlers() {
 
         // Whether the current data is for total caught fish or fish returned to sea
         if (STATE.isCaught) {
-
+            // If there are no more prevous fish
             if (STATE.fishIndex === 0) {
                 STATE.currentRecord.fishesCaught = [];
                 STATE.chosenFish = [];
@@ -139,6 +146,7 @@ function setFishSoftLeftKeyHandlers() {
                 fishBox.querySelector("b").textContent = fish.querySelector("img").alt;
                 fishBox.querySelector("img").src = fish.querySelector("img").src;
 
+                // Load and return to the previous tally count
                 const prevNumberOfUnitsReturned = STATE.currentRecord.fishesCaught[STATE.currentRecord.fishesCaught.length - 1].numberOfUnitsReturned;
                 STATE.activeView.querySelector("#numberText").textContent = prevNumberOfUnitsReturned;
                 setTallies(parseInt(prevNumberOfUnitsReturned));
@@ -154,6 +162,7 @@ function setFishSoftLeftKeyHandlers() {
             box.querySelector("b").textContent = "Fish Caught"
             box.querySelector("img").src = "../resources/fishInNet.png"
 
+            // Load and return to the previous tally count
             const prevNumberOfUnitsCaught = STATE.currentRecord.fishesCaught[STATE.currentRecord.fishesCaught.length - 1].numberOfUnitsCaught;
             STATE.activeView.querySelector("#numberText").textContent = prevNumberOfUnitsCaught;
             setTallies(parseInt(prevNumberOfUnitsCaught));
@@ -177,11 +186,12 @@ function setFirstFishInput() {
 
     // Set the first fish
     const fishID = parseInt(STATE.chosenFish[0].getAttribute("localid"));
+    const fishInfo = findFishWithId(fishID);
     STATE.isCaught = true;
     STATE.fishIndex = 0;
-    const unit = unitsConfig[STATE.currentRecord.unitID];
+    const unit = findUnitWithId(parseInt(STATE.currentRecord.unitID));
 
-    addStaticImageBox("fishCaughtView", "fishType", fishesConfig[fishID].filePath, fishesConfig[fishID].speciesName);
+    addStaticImageBox("fishCaughtView", "fishType", fishInfo.filePath, fishInfo.speciesName);
     addStaticImageBox("fishCaughtView", "caughtOrThrown", "../resources/fishInNet.png", "Fish Caught");
     addInputArea();
     addStaticImageBox("fishCaughtView", "unitBox", unit.filePath, unit.unitName);
@@ -225,11 +235,19 @@ function reorderFish() {
     }
 
     allElements = getAllElements();
-    // -1 to ignore done button
+    // subtract from one to ignore done button
     for (let i = 0; i < allElements.length - 1; i++) {
         STATE.fishOrder.push(parseInt(allElements[i].getAttribute("localid")));
     }
 
     localStorage.setItem("fishOrder", JSON.stringify(STATE.fishOrder));
 
+}
+
+function findFishWithId(id) {
+    for (let i = 0; i < fishesConfig.length; i++) {
+        if (fishesConfig[i].id === id) {
+            return fishesConfig[i];
+        }
+    }
 }

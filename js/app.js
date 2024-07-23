@@ -1,8 +1,10 @@
 // KaiOS 2.5.1.1 runs Firefox 48. Can repeat by running navigator.userAgent in console
-// Any feature needs to be supported by Firefox 48 and earlier. Good luck :)
+// Any feature needs to be supported by Firefox 48 and earlier (or be specifically tested).
 
 // Global app state
 var STATE = {
+  geolocation: new Array(),
+
   // Used for storing a list of fish image boxes that have been chosen while not finalised
   chosenFish: new Array(),
 
@@ -28,7 +30,7 @@ var STATE = {
   // Used for navigation, contains a list of all the navigable items in the active view
   naviItems: null,
 
-  // Used for navigation for "up" and "down" to know what value to increment/decrement by
+  // Used for navigation for "up" and "down" to know what value to increment/decrement by for the index list of items
   activeColumnSize: null,
 
   // Used when recording amount of fish caught, tracks whether the current value is total caught or returned to sea
@@ -38,19 +40,21 @@ var STATE = {
   // Tracks the index of the current fish in the chosenFish array that we are recording for
   fishIndex: null,
 
-  // A reference to the reference box of the current unit being chosen for the haul
-  // Used for copy over the image src etc. to the record view
-  currentUnit: null,
-
+  // An integer array that stores the IDs of fish that represent the order of fish that appears in the
+  // fish selection view
   fishOrder: new Array(),
 }
 
 
 window.addEventListener("load", function () {
-  var viewRoot = document.getElementById("rootView");
 
+  // Lets the OS know to not sleep deeply.
+  navigator.requestWakeLock("gps");
+
+  var viewRoot = document.getElementById("rootView");
   STATE.views = viewRoot.querySelectorAll(".view");
-  // First view should be registration view
+
+  // Check if already registered. If true, then load registered gear.
   if (!localStorage.getItem("registered")) {
     STATE.activeView = STATE.views[0];
   } else {
@@ -59,7 +63,7 @@ window.addEventListener("load", function () {
     STATE.activeView = document.getElementById("gearRecordView");
   }
 
-  // Function for transferring to next view
+  // Function for transferring to next view, when enter key is pressed
   document.getElementById("registerView").enterKeyHandler = event => {
     // Make sure both inputs areas are not blank
     const fisherID = this.document.getElementById("fid");
@@ -70,9 +74,7 @@ window.addEventListener("load", function () {
       this.localStorage.setItem("boatID", boatID.value);
       changeViewTo("gearView");
     }
-
   }
-
 
   // Add 'active' class to the landing view so that it is visible
   STATE.activeView.classList.add('active');
@@ -81,17 +83,15 @@ window.addEventListener("load", function () {
 
   // By default select the first navigation item
   const firstElement = STATE.activeView.querySelectorAll("[nav-selectable]")[0];
-
   firstElement.setAttribute("nav-selected", "true");
   firstElement.focus();
 
   setColumnNumber();
   setNavIndices();
   setSoftKeys()
-
 });
 
-// Key handler for button presses
+// Key handler for button presses, remaps keys here
 window.addEventListener('keydown', function (e) {
   switch (e.key) {
     case 'Enter':
@@ -136,14 +136,12 @@ const getTheIndexOfTheSelectedElement = () => {
 // Provide logic for the process of selecting the next navigation item
 const selectElement = setIndex => {
   const prevElement = document.activeElement;
-
   const nextElement = getAllElements()[setIndex];
 
   prevElement.setAttribute("nav-selected", false);
   nextElement.setAttribute("nav-selected", true);
 
   nextElement.focus();
-
 }
 
 // Logic for navigating "right" 
@@ -157,7 +155,6 @@ const Right = event => {
     STATE.activeView.querySelector("#numberText").textContent = count.toString();
     setTallies(count);
   } else if (document.activeElement.tagName.toLowerCase() !== 'input') {
-
     const allElements = getAllElements();
     const currentIndex = getTheIndexOfTheSelectedElement();
 
@@ -203,7 +200,6 @@ const Down = event => {
     STATE.activeView.querySelector("#numberText").textContent = count.toString();
     setTallies(count);
   } else {
-
     const allElements = getAllElements();
     const currentIndex = getTheIndexOfTheSelectedElement();
 
@@ -248,7 +244,7 @@ function addDoneButton(gridContainerID) {
   var entry = document.createElement("img");
 
   // Set the relevant information for the image
-  entry.src = "../resources/done.png";;
+  entry.src = "../resources/done.png";
   entry.alt = "done";
   entry.className = 'doneButton';
 
@@ -277,11 +273,9 @@ function setColumnNumber() {
 // Assign the correct navigation index to each of the navigation elements
 function setNavIndices() {
   var allActiveElements = getAllElements();
-
   for (let index = 0; index < allActiveElements.length; index++) {
     allActiveElements[index].setAttribute("nav-index", index);
   }
-
 }
 
 // Change the current active view to the new view

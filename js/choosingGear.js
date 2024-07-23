@@ -8,6 +8,8 @@ window.addEventListener("load", function () {
 // Loads gear images into the correct views
 function populateGear() {
     const rootView = document.getElementById("rootView");
+
+    // Create a new view for each of the gear types that is created in the config file.
     for (let i = 0; i < gearConfig.length; i++) {
         const newView = createNewGearTypeView(gearConfig[i].viewName, gearConfig[i].gearType, gearConfig[i].filePath, gearConfig[i].id);
         rootView.appendChild(newView);
@@ -24,6 +26,7 @@ function populateGear() {
 
 }
 
+// Create a new view for a specific gear type dynamically based on configuration information
 function createNewGearTypeView(viewName, gearType, filePath, typeID) {
     const view = document.createElement("div");
     view.classList.add("view");
@@ -35,6 +38,7 @@ function createNewGearTypeView(viewName, gearType, filePath, typeID) {
     return view;
 }
 
+// Load all the gears to the respective gears type views
 function attachGearsToView(gearView, gears) {
     for (let i = 0; i < gears.length; i++) {
         addNewImageBox(gearView.id, gears[i].id, gears[i].filePath, gears[i].gearName)
@@ -46,7 +50,8 @@ function setGearEnterKeyHandlers() {
 
     gridViewContainer.enterKeyHandler = event => {
         const gearViewIndex = parseInt(event.target.getAttribute("localid"));
-        if (gearViewIndex === -1) {
+        // If the done button is pressed and there is no registered gear
+        if (gearViewIndex === -1 && STATE.registeredGear.length > 0) {
             populateChosenGear();
             storeChosenGear();
             changeViewTo("gearRecordView");
@@ -80,17 +85,16 @@ function setGearEnterKeyHandlers() {
         }
     };
 
+    // Attach the key handler to the dynamically created views
     for (let i = 0; i < gearConfig.length; i++) {
         document.getElementById(gearConfig[i].viewName).enterKeyHandler = specificGearViewEnterKeyHandler;
     }
 
     document.getElementById("gearRecordView").enterKeyHandler = event => {
         const curElement = event.target;
-        // current record is for persistence, currently not fully utilised or implemented except for image loading purposes
         STATE.currentRecord.gearID = parseInt(curElement.getAttribute("localid"));
         changeViewTo("unitView");
     }
-
 }
 
 function setGearSoftleftKeyHandlers(){
@@ -122,17 +126,20 @@ function populateChosenGear() {
         gearRecordView.removeChild(gearRecordView.lastChild);
     }
 
+    // Add the registered gear to the next view to allow to be selected
     for (let i = 0; i < STATE.registeredGear.length; i++) {
         const gearInfo = findGearWithId(parseInt(STATE.registeredGear[i]));
         addNewImageBox("gearRecordView", gearInfo.id, gearInfo.filePath, gearInfo.gearName);
     }
 }
 
+// Persist the chosen gear
 function storeChosenGear(){
     localStorage.setItem("registeredGear", JSON.stringify(STATE.registeredGear));
     localStorage.setItem("registered", "true");
 }
 
+// Find the specific gear with an integer ID based on the config file
 function findGearWithId(id){
     for (let i = 0; i < gearConfig.length; i++) {
         for (let j = 0; j < gearConfig[i].gears.length; j++) {
