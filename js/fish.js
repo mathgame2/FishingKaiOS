@@ -65,7 +65,7 @@ function setFishEnterKeyHandlers() {
             // Set the state to be for fish returned to sea
             const box = document.getElementById("caughtOrThrown");
             box.querySelector("b").textContent = "Fish Thrown"
-            box.querySelector("img").src = "../resources/fishBackToSea.png"
+            box.querySelector("img").src = FISH_RETURNED_FILE_PATH;
 
             // Create a new catch record
             const newCatch = {
@@ -96,8 +96,8 @@ function setFishEnterKeyHandlers() {
 
                 // change to fish caught
                 const box = document.getElementById("caughtOrThrown");
-                box.querySelector("b").textContent = "Fish Caught"
-                box.querySelector("img").src = "../resources/fishInNet.png"
+                box.querySelector("b").textContent = "Fish Caught";
+                box.querySelector("img").src = FISH_CAUGHT_FILE_PATH;
 
                 // reset tallies
                 STATE.activeView.querySelector("#numberText").textContent = "0";
@@ -107,6 +107,8 @@ function setFishEnterKeyHandlers() {
             } else {
                 // if no more fish, clear chosen fish and move on
                 changeViewTo("mapView");
+
+                // Necessary to force map to reload to avoid bug of it loading only one tile at a time
                 setTimeout(function () {
                     STATE.mymap.invalidateSize();
                 }, 1);
@@ -139,7 +141,7 @@ function setFishSoftLeftKeyHandlers() {
                 // change to fish caught
                 const box = document.getElementById("caughtOrThrown");
                 box.querySelector("b").textContent = "Fish Thrown"
-                box.querySelector("img").src = "../resources/fishBackToSea.png"
+                box.querySelector("img").src = FISH_RETURNED_FILE_PATH;
 
                 // change to the previous fish
                 let fishBox = document.getElementById("fishType");
@@ -161,7 +163,7 @@ function setFishSoftLeftKeyHandlers() {
             // change to fish caught
             const box = document.getElementById("caughtOrThrown");
             box.querySelector("b").textContent = "Fish Caught"
-            box.querySelector("img").src = "../resources/fishInNet.png"
+            box.querySelector("img").src = FISH_CAUGHT_FILE_PATH;
 
             // Load and return to the previous tally count
             const prevNumberOfUnitsCaught = STATE.currentRecord.fishesCaught[STATE.currentRecord.fishesCaught.length - 1].numberOfUnitsCaught;
@@ -191,7 +193,7 @@ function setFirstFishInput() {
     const unit = findUnitWithId(parseInt(STATE.currentRecord.unitID));
 
     addStaticImageBox("fishCaughtView", "fishType", fishInfo.filePath, fishInfo.speciesName);
-    addStaticImageBox("fishCaughtView", "caughtOrThrown", "../resources/fishInNet.png", "Fish Caught");
+    addStaticImageBox("fishCaughtView", "caughtOrThrown", FISH_CAUGHT_FILE_PATH, "Fish Caught");
     addInputArea();
     addStaticImageBox("fishCaughtView", "unitBox", unit.filePath, unit.unitName);
 }

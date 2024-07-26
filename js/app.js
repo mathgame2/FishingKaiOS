@@ -3,6 +3,7 @@
 
 // Global app state
 var STATE = {
+  centerMarker: null,
   geolocation: new Array(),
 
   // Used for storing a list of fish image boxes that have been chosen while not finalised
@@ -49,7 +50,7 @@ var STATE = {
 
 
 window.addEventListener("load", function () {
-  
+
   // Lets the OS know to not sleep deeply.
   // navigator.requestWakeLock("gps");
 
@@ -76,7 +77,7 @@ window.addEventListener("load", function () {
       changeViewTo("gearView");
     }
   }
-  
+
   // Add 'active' class to the landing view so that it is visible
   STATE.activeView.classList.add('active');
   // Get all the navigation items of this view
@@ -102,7 +103,7 @@ window.addEventListener('keydown', function (e) {
     case 'ArrowUp':
     case '2':
       if (STATE.activeView.id === "mapView") {
-        move(STATE.mymap, [0, -1 * STATE.mymap.options.keyboardPanDelta]);
+        panOnMap(STATE.mymap, [0, -1 * STATE.mymap.options.keyboardPanDelta]);
         break;
       }
       Up(e);
@@ -110,7 +111,7 @@ window.addEventListener('keydown', function (e) {
     case 'ArrowLeft':
     case '4':
       if (STATE.activeView.id === "mapView") {
-        move(STATE.mymap, [-1 * STATE.mymap.options.keyboardPanDelta, 0]);
+        panOnMap(STATE.mymap, [-1 * STATE.mymap.options.keyboardPanDelta, 0]);
         break;
       }
       Left(e);
@@ -118,7 +119,7 @@ window.addEventListener('keydown', function (e) {
     case 'ArrowDown':
     case '8':
       if (STATE.activeView.id === "mapView") {
-        move(STATE.mymap, [0, STATE.mymap.options.keyboardPanDelta]);
+        panOnMap(STATE.mymap, [0, STATE.mymap.options.keyboardPanDelta]);
         break;
       }
       Down(e);
@@ -126,14 +127,23 @@ window.addEventListener('keydown', function (e) {
     case 'ArrowRight':
     case '6':
       if (STATE.activeView.id === "mapView") {
-        move(STATE.mymap, [STATE.mymap.options.keyboardPanDelta, 0]);
+        panOnMap(STATE.mymap, [STATE.mymap.options.keyboardPanDelta, 0]);
         break;
       }
       Right(e);
       break;
     case 'SoftLeft':
+      if (STATE.activeView.id === "mapView") {
+        STATE.mymap.setZoom(STATE.mymap.getZoom() - STATE.mymap.options.zoomDelta);
+        break;
+      }
       STATE.activeView.softleftKeyHandler();
       break;
+    case 'SoftRight':
+      if (STATE.activeView.id === "mapView") {
+        STATE.mymap.setZoom(STATE.mymap.getZoom() + STATE.mymap.options.zoomDelta);
+        break;
+      }
   }
 })
 

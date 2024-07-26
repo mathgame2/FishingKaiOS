@@ -140,3 +140,7 @@ const gearConfig = [
 
 // Source of the image representing the done button
 const DONE_BUTTON_FILE_PATH = "../resources/done.png";
+
+const FISH_CAUGHT_FILE_PATH = "../resources/fishInNet.png";
+
+const FISH_RETURNED_FILE_PATH = "../resources/fishBackToSea.png";
