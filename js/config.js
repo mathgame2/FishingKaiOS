@@ -18,52 +18,53 @@ const fishesConfig = [
     {
         "id": 0,
         "filePath": "../resources/fish/crab.png",
-        "speciesName" : "Crab"
+        "speciesName": "Crab"
     },
     {
         "id": 1,
         "filePath": "../resources/fish/lobster.png",
-        "speciesName" : "Lobster"
+        "speciesName": "Lobster"
     },
     {
         "id": 2,
         "filePath": "../resources/fish/fish1.png",
-        "speciesName" : "Fish 1"
+        "speciesName": "Fish 1"
     },
     {
         "id": 3,
         "filePath": "../resources/fish/fish2.png",
-        "speciesName" : "Fish 2"
+        "speciesName": "Fish 2"
     },
     {
         "id": 4,
         "filePath": "../resources/fish/fish3.png",
-        "speciesName" : "Fish 3"
+        "speciesName": "Fish 3"
     },
     {
         "id": 5,
         "filePath": "../resources/fish/fish4.png",
-        "speciesName" : "Fish 4"
+        "speciesName": "Fish 4"
     },
     {
         "id": 6,
         "filePath": "../resources/fish/fish5.png",
-        "speciesName" : "Fish 5"
+        "speciesName": "Fish 5"
     },
     {
         "id": 7,
         "filePath": "../resources/fish/fish6.png",
-        "speciesName" : "Fish 6"
+        "speciesName": "Fish 6"
     },
     {
         "id": 8,
         "filePath": "../resources/fish/fish7.png",
-        "speciesName" : "Fish 7"
+        "speciesName": "Fish 7"
     }
 ]
 
 // Ids of specific gears need to be unique across gear types
-// Ids for gear types are independent for specific gears, these ids are used for dynamically creating traversal for registration
+// Ids for gear types are independent for specific gears, these ids are used for creating the navigation view for registration
+// gearType is the subtitle name under the image, whereas viewName is used as the html ID of the view
 const gearConfig = [
     {
         "gearType": "Static Gear",
@@ -86,7 +87,7 @@ const gearConfig = [
                 "filePath": "../resources/gear/static/lining.png",
                 "gearName": "Lining"
             },
-            
+
         ]
     },
     {
@@ -136,3 +137,6 @@ const gearConfig = [
         ]
     }
 ]
+
+// Source of the image representing the done button
+const DONE_BUTTON_FILE_PATH = "../resources/done.png";

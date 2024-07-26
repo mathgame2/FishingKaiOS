@@ -8,19 +8,18 @@
   <link rel="stylesheet" type="text/css" href="/css/app.css" />
   <link rel="stylesheet" type="text/css" href="/css/softkey.css" />
   <link rel="stylesheet" type="text/css" href="/css/imageBox.css" />
+  <link rel="stylesheet" charset="utf-8" href="lib/leaflet/leaflet.css" />
+	
   <title>Fishing</title>
-
   <!-- Inline scripts are forbidden in Firefox OS apps (CSP restrictions),
          so we use a script file. -->
   <script type="text/javascript" src="js/config.js" defer></script>
   <script type="text/javascript" src="js/app.js" defer></script>
-  <script type="text/javascript" src="js/choosingGear.js" defer></script>
+  <script type="text/javascript" src="js/gears.js" defer></script>
   <script type="text/javascript" src="js/units.js" defer></script>
   <script type="text/javascript" src="js/fish.js" defer></script>
-  <!-- <script type="text/javascript" src="js/geolocationTest.js" defer></script> -->
-
-
-
+  <script type="text/javascript" charset="utf-8" src="lib/leaflet/leaflet.js"></script>
+  <script type="text/javascript" src="js/map.js" defer></script>
 </head>
 
 <body>
@@ -46,6 +45,7 @@
     <div class="view" id="fishCaughtView" nav-column-size="2">
     </div>
     <div class="view" id="mapView">
+      <div id="map" nav-selectable="true" tabindex="-1"></div>
     </div>
   </div>
 

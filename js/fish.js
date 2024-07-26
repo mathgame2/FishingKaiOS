@@ -107,13 +107,14 @@ function setFishEnterKeyHandlers() {
             } else {
                 // if no more fish, clear chosen fish and move on
                 changeViewTo("mapView");
+                setTimeout(function () {
+                    STATE.mymap.invalidateSize();
+                }, 1);
             }
         }
     }
 
-    document.getElementById("mapView").enterKeyHandler = event => {
-        changeViewTo("gearRecordView");
-    }
+    
 }
 
 function setFishSoftLeftKeyHandlers() {
@@ -172,9 +173,7 @@ function setFishSoftLeftKeyHandlers() {
         }
     }
 
-    document.getElementById("mapView").softleftKeyHandler = event => {
-        changeViewTo("fishCaughtView");
-    }
+    
 }
 
 // Set up the input view for the first fish that has been chosen

@@ -34,9 +34,11 @@ body {
         "a a";
 }
 
-/* 
-  .view.fishInput.active {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: 10px;
-  } */
+.view.active#mapView {
+    height: 100%;
+    display: block;
+}
+
+#map {
+    height: 100%;
+}

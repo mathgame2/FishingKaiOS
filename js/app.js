@@ -43,13 +43,15 @@ var STATE = {
   // An integer array that stores the IDs of fish that represent the order of fish that appears in the
   // fish selection view
   fishOrder: new Array(),
+
+  mymap: null,
 }
 
 
 window.addEventListener("load", function () {
-
+  
   // Lets the OS know to not sleep deeply.
-  navigator.requestWakeLock("gps");
+  // navigator.requestWakeLock("gps");
 
   var viewRoot = document.getElementById("rootView");
   STATE.views = viewRoot.querySelectorAll(".view");
@@ -62,7 +64,6 @@ window.addEventListener("load", function () {
     populateChosenGear();
     STATE.activeView = document.getElementById("gearRecordView");
   }
-
   // Function for transferring to next view, when enter key is pressed
   document.getElementById("registerView").enterKeyHandler = event => {
     // Make sure both inputs areas are not blank
@@ -75,7 +76,7 @@ window.addEventListener("load", function () {
       changeViewTo("gearView");
     }
   }
-
+  
   // Add 'active' class to the landing view so that it is visible
   STATE.activeView.classList.add('active');
   // Get all the navigation items of this view
@@ -100,18 +101,34 @@ window.addEventListener('keydown', function (e) {
       break;
     case 'ArrowUp':
     case '2':
+      if (STATE.activeView.id === "mapView") {
+        move(STATE.mymap, [0, -1 * STATE.mymap.options.keyboardPanDelta]);
+        break;
+      }
       Up(e);
       break;
     case 'ArrowLeft':
     case '4':
+      if (STATE.activeView.id === "mapView") {
+        move(STATE.mymap, [-1 * STATE.mymap.options.keyboardPanDelta, 0]);
+        break;
+      }
       Left(e);
       break;
     case 'ArrowDown':
     case '8':
+      if (STATE.activeView.id === "mapView") {
+        move(STATE.mymap, [0, STATE.mymap.options.keyboardPanDelta]);
+        break;
+      }
       Down(e);
       break
     case 'ArrowRight':
     case '6':
+      if (STATE.activeView.id === "mapView") {
+        move(STATE.mymap, [STATE.mymap.options.keyboardPanDelta, 0]);
+        break;
+      }
       Right(e);
       break;
     case 'SoftLeft':
@@ -244,7 +261,7 @@ function addDoneButton(gridContainerID) {
   var entry = document.createElement("img");
 
   // Set the relevant information for the image
-  entry.src = "../resources/done.png";
+  entry.src = DONE_BUTTON_FILE_PATH;
   entry.alt = "done";
   entry.className = 'doneButton';
 
@@ -297,7 +314,6 @@ function changeViewTo(viewName) {
       firstElement.scrollIntoView({ behavior: "smooth" });
       firstElement.setAttribute("nav-selected", "true");
       firstElement.focus();
-      firstElement.focus();
 
       setColumnNumber();
       setSoftKeys();
@@ -309,7 +325,7 @@ function changeViewTo(viewName) {
 
 // Add a new navigable  image box item to a specific grid container, a file location for the image and the name of the image
 // Local ID is the integer id of the item in it's group (i.e. gears or fish)
-function addNewImageBox(gridContainerID, localID, file_loc, subtitle) {
+function addNewImageBox(gridContainerID, localID, filePath, subtitle) {
   var gridContainer = document.getElementById(gridContainerID);
 
   // Create the relevant html tag elements
@@ -318,7 +334,7 @@ function addNewImageBox(gridContainerID, localID, file_loc, subtitle) {
   tag.textContent = subtitle;
   var entry = document.createElement("img");
 
-  entry.src = file_loc;
+  entry.src = filePath;
   entry.alt = subtitle;
 
   // Needed to make the box focusable
@@ -337,7 +353,7 @@ function addNewImageBox(gridContainerID, localID, file_loc, subtitle) {
 }
 
 // Add a new image box that is not navigable
-function addStaticImageBox(gridContainerID, id, file_loc, name) {
+function addStaticImageBox(gridContainerID, id, filePath, name) {
   var gridContainer = document.getElementById(gridContainerID);
 
   var container = document.createElement("div");
@@ -345,7 +361,7 @@ function addStaticImageBox(gridContainerID, id, file_loc, name) {
   tag.textContent = name;
   var entry = document.createElement("img");
 
-  entry.src = file_loc;
+  entry.src = filePath;
   entry.alt = name;
 
   container.className = "imageBox";
