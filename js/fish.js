@@ -107,11 +107,6 @@ function setFishEnterKeyHandlers() {
             } else {
                 // if no more fish, clear chosen fish and move on
                 changeViewTo("timeView");
-
-                // Necessary to force map to reload to avoid bug of it loading only one tile at a time
-                setTimeout(function () {
-                    STATE.mymap.invalidateSize();
-                }, 1);
             }
         }
     }

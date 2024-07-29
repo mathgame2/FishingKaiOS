@@ -424,7 +424,6 @@ function setSoftKeys() {
       center.textContent = "Submit";
       break;
     case "fishCaughtView":
-
       left.textContent = "Back";
       right.textContent = "";
       center.textContent = "Submit";
@@ -441,8 +440,8 @@ function setSoftKeys() {
       center.textContent = "Select";
       break;
     case "mapView":
-      left.textContent = "Zoom in";
-      right.textContent = "Zoom Out";
+      left.textContent = "Zoom Out";
+      right.textContent = "Zoom In";
       center.textContent = "Set";
   }
 }
