@@ -1,10 +1,7 @@
 window.addEventListener("load", function () {
     loadTimeView();
-    console.log("here");
     setTimeEnterKeyHandlers();
-    console.log("here1");
     setTimeSoftleftKeyHandlers();
-    console.log("here2");
 });
 
 
@@ -33,7 +30,7 @@ function setTimeEnterKeyHandlers(){
         setTimeout(function () {
             STATE.mymap.invalidateSize();
         }, 1);
-        
+
         changeViewTo("mapView");
 
     }
