@@ -106,7 +106,7 @@ function setFishEnterKeyHandlers() {
                 STATE.isCaught = true;
             } else {
                 // if no more fish, clear chosen fish and move on
-                changeViewTo("mapView");
+                changeViewTo("timeView");
 
                 // Necessary to force map to reload to avoid bug of it loading only one tile at a time
                 setTimeout(function () {
@@ -213,7 +213,7 @@ function addInputArea() {
     entry.textContent = " ";
 
     // Needed to make the box focusable
-    container.tabIndex = -1;
+    container.tabIndex = 0;
     container.id = "inputNumberBox"
     container.className = "imageBox";
 

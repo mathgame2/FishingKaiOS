@@ -3,7 +3,10 @@
 
 // Global app state
 var STATE = {
+  // Marker at the center of the map
   centerMarker: null,
+
+  // A list of previous geolocation coordinates
   geolocation: new Array(),
 
   // Used for storing a list of fish image boxes that have been chosen while not finalised
@@ -102,41 +105,21 @@ window.addEventListener('keydown', function (e) {
       break;
     case 'ArrowUp':
     case '2':
-      if (STATE.activeView.id === "mapView") {
-        panOnMap(STATE.mymap, [0, -1 * STATE.mymap.options.keyboardPanDelta]);
-        break;
-      }
       Up(e);
       break;
     case 'ArrowLeft':
     case '4':
-      if (STATE.activeView.id === "mapView") {
-        panOnMap(STATE.mymap, [-1 * STATE.mymap.options.keyboardPanDelta, 0]);
-        break;
-      }
       Left(e);
       break;
     case 'ArrowDown':
     case '8':
-      if (STATE.activeView.id === "mapView") {
-        panOnMap(STATE.mymap, [0, STATE.mymap.options.keyboardPanDelta]);
-        break;
-      }
       Down(e);
       break
     case 'ArrowRight':
     case '6':
-      if (STATE.activeView.id === "mapView") {
-        panOnMap(STATE.mymap, [STATE.mymap.options.keyboardPanDelta, 0]);
-        break;
-      }
       Right(e);
       break;
     case 'SoftLeft':
-      if (STATE.activeView.id === "mapView") {
-        STATE.mymap.setZoom(STATE.mymap.getZoom() - STATE.mymap.options.zoomDelta);
-        break;
-      }
       STATE.activeView.softleftKeyHandler();
       break;
     case 'SoftRight':
@@ -181,6 +164,8 @@ const Right = event => {
     // Set the new count
     STATE.activeView.querySelector("#numberText").textContent = count.toString();
     setTallies(count);
+  } else if (STATE.activeView.id === "mapView") {
+    panOnMap(STATE.mymap, [STATE.mymap.options.keyboardPanDelta, 0]);
   } else if (document.activeElement.tagName.toLowerCase() !== 'input') {
     const allElements = getAllElements();
     const currentIndex = getTheIndexOfTheSelectedElement();
@@ -204,6 +189,8 @@ const Left = event => {
     // Set the new count
     STATE.activeView.querySelector("#numberText").textContent = count.toString();
     setTallies(count);
+  } else if (STATE.activeView.id === "mapView") {
+    panOnMap(STATE.mymap, [-1 * STATE.mymap.options.keyboardPanDelta, 0]);
   } else if (document.activeElement.tagName.toLowerCase() !== 'input') {
     const allElements = getAllElements();
     const currentIndex = getTheIndexOfTheSelectedElement();
@@ -226,6 +213,8 @@ const Down = event => {
     // Set the new count
     STATE.activeView.querySelector("#numberText").textContent = count.toString();
     setTallies(count);
+  } else if (STATE.activeView.id === "mapView") {
+    panOnMap(STATE.mymap, [0, STATE.mymap.options.keyboardPanDelta]);
   } else {
     const allElements = getAllElements();
     const currentIndex = getTheIndexOfTheSelectedElement();
@@ -248,6 +237,8 @@ const Up = event => {
     // Set the new count
     STATE.activeView.querySelector("#numberText").textContent = count.toString();
     setTallies(count);
+  } else if (STATE.activeView.id === "mapView") {
+    panOnMap(STATE.mymap, [0, -1 * STATE.mymap.options.keyboardPanDelta]);
   } else {
     const allElements = getAllElements();
     const currentIndex = getTheIndexOfTheSelectedElement();
@@ -276,7 +267,7 @@ function addDoneButton(gridContainerID) {
   entry.className = 'doneButton';
 
   // Needed to make the box focusable
-  container.tabIndex = -1;
+  container.tabIndex = 0;
 
   // Set the relevant information for the box
   container.className = "imageBox";
@@ -348,7 +339,7 @@ function addNewImageBox(gridContainerID, localID, filePath, subtitle) {
   entry.alt = subtitle;
 
   // Needed to make the box focusable
-  container.tabIndex = -1;
+  container.tabIndex = 0;
 
   // Set the relevant information for the box
   container.className = "imageBox";
@@ -430,13 +421,13 @@ function setSoftKeys() {
     case "registerView":
       left.textContent = "";
       right.textContent = "";
-      center.textContent = "Submit"
+      center.textContent = "Submit";
       break;
     case "fishCaughtView":
-    case "mapView":
+
       left.textContent = "Back";
       right.textContent = "";
-      center.textContent = "Submit"
+      center.textContent = "Submit";
       break;
     case "gearView":
     case "staticGearView":
@@ -447,7 +438,22 @@ function setSoftKeys() {
     case "fishView":
       left.textContent = "Back";
       right.textContent = "";
-      center.textContent = "Select"
+      center.textContent = "Select";
       break;
+    case "mapView":
+      left.textContent = "Zoom in";
+      right.textContent = "Zoom Out";
+      center.textContent = "Set";
+  }
+}
+
+function clearCurrentRecord(){
+  STATE.currentRecord =  {
+    gearID: null,
+    haulID: null,
+    unitID: null,
+    fishesCaught: new Array(),
+    dateOfCatch: null,
+    locationOfCatch: null,
   }
 }

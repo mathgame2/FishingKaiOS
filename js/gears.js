@@ -93,6 +93,7 @@ function setGearEnterKeyHandlers() {
 
     document.getElementById("gearRecordView").enterKeyHandler = event => {
         const curElement = event.target;
+        clearCurrentRecord();
         STATE.currentRecord.gearID = parseInt(curElement.getAttribute("localid"));
         changeViewTo("unitView");
     }
@@ -114,7 +115,23 @@ function setGearSoftleftKeyHandlers(){
     }
 
     document.getElementById("gearRecordView").softleftKeyHandler = event => {
-        changeViewTo("gearView")
+        // Reselecting already selected gear
+        for (let i = 0; i < gearConfig.length; i++) {
+
+            const gearView = document.getElementById(gearConfig[i].viewName);
+            const gearViewNaviItems = gearView.querySelectorAll("[nav-selectable]");
+
+            for (let j = 0; j < gearViewNaviItems.length; j++) {
+
+                if (STATE.registeredGear.includes(gearViewNaviItems[j].getAttribute("localID"))) {
+                    gearViewNaviItems[j].setAttribute('image-selected', 'true');
+                }else{
+                    gearViewNaviItems[j].setAttribute('image-selected', 'false');
+                }
+            }
+        }
+
+        changeViewTo("gearView");
     }
 }
 

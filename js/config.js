@@ -141,6 +141,12 @@ const gearConfig = [
 // Source of the image representing the done button
 const DONE_BUTTON_FILE_PATH = "../resources/done.png";
 
+// Source of image representing the fish caught
 const FISH_CAUGHT_FILE_PATH = "../resources/fishInNet.png";
 
+// Source of image representing fish returned to sea
 const FISH_RETURNED_FILE_PATH = "../resources/fishBackToSea.png";
+
+const YESTERDAY_FILE_PATH = "../resources/time/yesterday.png";
+
+const TODAY_FILE_PATH = "../resources/time/today.png";
